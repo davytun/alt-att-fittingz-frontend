@@ -13,6 +13,23 @@ class ApiClient {
     };
   }
 
+  private isApiErrorLike(data: unknown): data is {
+    message: string;
+    errors?: ApiError["errors"];
+    errorType?: string;
+    stack?: unknown;
+  } {
+    if (!data || typeof data !== "object") return false;
+    const d = data as Record<string, unknown>;
+    if (typeof d.message !== "string") return false;
+    const msg = d.message as string;
+    return (
+      msg.includes("already exists") ||
+      msg.includes("Error:") ||
+      "stack" in d
+    );
+  }
+
   private async handleResponse<T>(response: Response): Promise<T> {
     const contentType = response.headers.get("content-type");
     let responseData: unknown;
@@ -37,23 +54,17 @@ class ApiClient {
     // Handle cases where API returns 200 but with error message
     if (response.ok) {
       // Check if the response is actually an error disguised as success
-      if (
-        typeof responseData === "object" &&
-        responseData.message &&
-        (responseData.message.includes("already exists") ||
-          responseData.message.includes("Error:") ||
-          responseData.stack)
-      ) {
+      if (this.isApiErrorLike(responseData)) {
         // This is actually an error response with 200 status
         throw {
           status: 400, // Treat as client error
-          message: responseData.message,
-          errors: responseData.errors,
-          errorType: responseData.errorType,
+          message: (responseData as { message: string }).message,
+          errors: (responseData as { errors?: ApiError["errors"] }).errors,
+          errorType: (responseData as { errorType?: string }).errorType,
         };
       }
 
-      return responseData;
+      return responseData as T;
     }
 
     // Handle non-200 status codes
@@ -65,15 +76,25 @@ class ApiClient {
       try {
         const parsed = JSON.parse(responseData);
         if (parsed && typeof parsed === "object") {
-          errorData = parsed;
+          const p = parsed as Record<string, unknown>;
+          errorData = {
+            message: typeof p.message === "string" ? (p.message as string) : `HTTP Error ${response.status}`,
+            errors: p.errors as ApiError["errors"],
+            errorType: typeof p.errorType === "string" ? (p.errorType as string) : undefined,
+          };
         } else {
           errorData.message = responseData;
         }
       } catch {
         errorData.message = responseData || `HTTP Error ${response.status}`;
       }
-    } else if (typeof responseData === "object") {
-      errorData = responseData;
+    } else if (typeof responseData === "object" && responseData !== null) {
+      const obj = responseData as Record<string, unknown>;
+      errorData = {
+        message: typeof obj.message === "string" ? (obj.message as string) : `HTTP Error ${response.status}`,
+        errors: obj.errors as ApiError["errors"],
+        errorType: typeof obj.errorType === "string" ? (obj.errorType as string) : undefined,
+      };
     }
 
     throw {
