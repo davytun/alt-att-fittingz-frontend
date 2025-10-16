@@ -24,7 +24,6 @@ export const useRegisterMutation = () => {
       if (email) {
         router.push(`/verify-email?email=${encodeURIComponent(email)}`);
       } else {
-        // Fallback navigation without query if email is unavailable
         router.push("/verify-email");
       }
     },
@@ -133,6 +132,95 @@ export const useResendVerificationMutation = () => {
         error?.message || "Unable to resend verification email";
       showToast({
         title: "Failed to Resend",
+        description: errorMessage,
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useForgotPasswordMutation = () => {
+  const { showToast } = useToast();
+
+  return useMutation({
+    mutationFn: authAPI.forgotPassword,
+    onSuccess: (data) => {
+      showToast({
+        title: "Reset Code Sent",
+        description:
+          data.message || "Password reset code has been sent to your email.",
+        type: "success",
+      });
+    },
+    onError: (error: AuthError) => {
+      console.error("Forgot password error:", error);
+
+      const errorMessage =
+        error?.message || "Failed to send reset code. Please try again.";
+      showToast({
+        title: "Failed to Send",
+        description: errorMessage,
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useVerifyResetCodeMutation = () => {
+  const { showToast } = useToast();
+
+  return useMutation({
+    mutationFn: authAPI.verifyResetCode,
+    onSuccess: (data) => {
+      if (data.verified) {
+        showToast({
+          title: "Code Verified",
+          description:
+            data.message ||
+            "Reset code verified successfully. You can now set a new password.",
+          type: "success",
+        });
+      } else {
+        throw new Error("Reset code verification failed");
+      }
+    },
+    onError: (error: AuthError) => {
+      console.error("Verify reset code error:", error);
+
+      const errorMessage =
+        error?.message || "Invalid or expired reset code. Please try again.";
+      showToast({
+        title: "Verification Failed",
+        description: errorMessage,
+        type: "error",
+      });
+    },
+  });
+};
+
+export const useResetPasswordMutation = () => {
+  const router = useRouter();
+  const { showToast } = useToast();
+
+  return useMutation({
+    mutationFn: authAPI.resetPassword,
+    onSuccess: (data) => {
+      showToast({
+        title: "Password Reset",
+        description:
+          data.message ||
+          "Password reset successful. You can now log in with your new password.",
+        type: "success",
+      });
+      router.push("/login");
+    },
+    onError: (error: AuthError) => {
+      console.error("Reset password error:", error);
+
+      const errorMessage =
+        error?.message || "Failed to reset password. Please try again.";
+      showToast({
+        title: "Reset Failed",
         description: errorMessage,
         type: "error",
       });

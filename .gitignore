@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+jest.config.js
+jest.setup.js
 
 # next.js
 /.next/

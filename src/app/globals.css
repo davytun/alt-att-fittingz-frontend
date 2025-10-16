@@ -44,6 +44,21 @@
 }
 
 :root {
+  /* custom root  */
+  --primary-bg: #0f4c75;
+  /* Primary Text | Secondary Text & icons */
+  --primary-text-dark: #222831;
+  --secondary-text-white: #a1a1a1;
+
+  /* Secondary (for hover cards) */
+  --secondary-teal-blue: #222886;
+
+  /* Neutral (for Cards background & dashboard) Elements */
+  --neutral-soft-white: #f7f9fc;
+  --neutral-soft-blue: #e3eff6;
+
+  /* end custom root  */
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

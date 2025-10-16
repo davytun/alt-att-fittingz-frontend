@@ -24,9 +24,7 @@ class ApiClient {
     if (typeof d.message !== "string") return false;
     const msg = d.message as string;
     return (
-      msg.includes("already exists") ||
-      msg.includes("Error:") ||
-      "stack" in d
+      msg.includes("already exists") || msg.includes("Error:") || "stack" in d
     );
   }
 
@@ -78,9 +76,15 @@ class ApiClient {
         if (parsed && typeof parsed === "object") {
           const p = parsed as Record<string, unknown>;
           errorData = {
-            message: typeof p.message === "string" ? (p.message as string) : `HTTP Error ${response.status}`,
+            message:
+              typeof p.message === "string"
+                ? (p.message as string)
+                : `HTTP Error ${response.status}`,
             errors: p.errors as ApiError["errors"],
-            errorType: typeof p.errorType === "string" ? (p.errorType as string) : undefined,
+            errorType:
+              typeof p.errorType === "string"
+                ? (p.errorType as string)
+                : undefined,
           };
         } else {
           errorData.message = responseData;
@@ -91,9 +95,15 @@ class ApiClient {
     } else if (typeof responseData === "object" && responseData !== null) {
       const obj = responseData as Record<string, unknown>;
       errorData = {
-        message: typeof obj.message === "string" ? (obj.message as string) : `HTTP Error ${response.status}`,
+        message:
+          typeof obj.message === "string"
+            ? (obj.message as string)
+            : `HTTP Error ${response.status}`,
         errors: obj.errors as ApiError["errors"],
-        errorType: typeof obj.errorType === "string" ? (obj.errorType as string) : undefined,
+        errorType:
+          typeof obj.errorType === "string"
+            ? (obj.errorType as string)
+            : undefined,
       };
     }
 

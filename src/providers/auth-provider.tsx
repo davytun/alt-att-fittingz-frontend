@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, type ReactNode, useContext, useEffect } from "react";
-import { useToast } from "@/components/ui/toast";
 import { useAuthStore } from "@/lib/store/auth-store";
 
 interface AuthContextType {
@@ -19,45 +18,52 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { isAuthenticated, clearAuth, isLoading } = useAuthStore();
   const router = useRouter();
   const pathname = usePathname();
-  const { showToast } = useToast();
 
   // Handle route protection
   useEffect(() => {
     // Don't run until loading is complete
     if (isLoading) return;
 
-    const publicRoutes = ["/login", "/register", "/verify-email"];
+    // Define public routes (accessible without authentication)
+    const publicRoutes = [
+      "/login",
+      "/register",
+      "/verify-email",
+      "/forgot-password",
+      "/verify-reset-code",
+      "/reset-password",
+    ];
+
     const isPublicRoute = publicRoutes.includes(pathname) || pathname === "/";
 
+    // Password reset pages should be accessible even when authenticated
+    const isPasswordResetPage =
+      pathname.includes("/forgot-password") ||
+      pathname.includes("/verify-reset-code") ||
+      pathname.includes("/reset-password");
+
     // If not authenticated and trying to access protected route, redirect to login
-    if (!isAuthenticated && !isPublicRoute) {
+    if (!isAuthenticated && !isPublicRoute && !isPasswordResetPage) {
       router.push("/login");
       return;
     }
 
-    // If authenticated and trying to access auth pages, redirect to dashboard
-    if (isAuthenticated && isPublicRoute && pathname !== "/") {
+    // If authenticated and trying to access auth pages (except password reset), redirect to dashboard
+    if (
+      isAuthenticated &&
+      isPublicRoute &&
+      !isPasswordResetPage &&
+      pathname !== "/"
+    ) {
       router.push("/dashboard");
       return;
     }
   }, [isAuthenticated, pathname, router, isLoading]);
 
   const logout = (options?: { redirect?: string; message?: string }) => {
-    const {
-      redirect = "/login",
-      message = "You have been logged out successfully.",
-    } = options || {};
+    const { redirect = "/login" } = options || {};
 
     clearAuth();
-
-    if (message) {
-      showToast({
-        title: "Logged Out",
-        description: message,
-        type: "info",
-      });
-    }
-
     router.push(redirect);
   };
 

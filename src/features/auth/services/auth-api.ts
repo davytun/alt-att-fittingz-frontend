@@ -1,10 +1,16 @@
 import type {
   AuthError,
   AuthResponse,
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
   LoginRequest,
   RegisterRequest,
   ResendVerificationRequest,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
   VerifyEmailRequest,
+  VerifyResetCodeRequest,
+  VerifyResetCodeResponse,
 } from "@/features/auth/types/auth";
 import { apiClient } from "@/lib/api/client";
 
@@ -64,6 +70,87 @@ export const authAPI = {
       );
     } catch (error) {
       console.error("Resend verification API error:", error);
+      throw error;
+    }
+  },
+
+  async forgotPassword(
+    data: ForgotPasswordRequest,
+  ): Promise<ForgotPasswordResponse> {
+    try {
+      return await apiClient.post<ForgotPasswordResponse>(
+        "/api/auth/forgot-password",
+        data,
+      );
+    } catch (error: unknown) {
+      console.error("Forgot password API error:", error);
+
+      if (typeof error === "string") {
+        try {
+          const parsedError = JSON.parse(error);
+          throw parsedError;
+        } catch {
+          throw {
+            message: error,
+            status: 500,
+          };
+        }
+      }
+
+      throw error;
+    }
+  },
+
+  async verifyResetCode(
+    data: VerifyResetCodeRequest,
+  ): Promise<VerifyResetCodeResponse> {
+    try {
+      return await apiClient.post<VerifyResetCodeResponse>(
+        "/api/auth/verify-reset-code",
+        data,
+      );
+    } catch (error: unknown) {
+      console.error("Verify reset code API error:", error);
+
+      if (typeof error === "string") {
+        try {
+          const parsedError = JSON.parse(error);
+          throw parsedError;
+        } catch {
+          throw {
+            message: error,
+            status: 500,
+          };
+        }
+      }
+
+      throw error;
+    }
+  },
+
+  async resetPassword(
+    data: ResetPasswordRequest,
+  ): Promise<ResetPasswordResponse> {
+    try {
+      return await apiClient.post<ResetPasswordResponse>(
+        "/api/auth/reset-password",
+        data,
+      );
+    } catch (error: unknown) {
+      console.error("Reset password API error:", error);
+
+      if (typeof error === "string") {
+        try {
+          const parsedError = JSON.parse(error);
+          throw parsedError;
+        } catch {
+          throw {
+            message: error,
+            status: 500,
+          };
+        }
+      }
+
       throw error;
     }
   },

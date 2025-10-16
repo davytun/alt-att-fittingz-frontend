@@ -43,12 +43,13 @@ export function VerifyEmailForm({ email }: VerifyEmailFormProps) {
 
   const verifyEmailMutation = useVerifyEmailMutation();
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: VerifyEmailFormData) => {
     setServerError("");
     try {
-      // Combine the code array into a string
-      const code = verificationCode.join("");
-      await verifyEmailMutation.mutateAsync({ email, verificationCode: code });
+      await verifyEmailMutation.mutateAsync({
+        email: data.email,
+        verificationCode: data.verificationCode,
+      });
     } catch (error: unknown) {
       const message =
         typeof error === "object" && error !== null && "message" in error
@@ -128,7 +129,7 @@ export function VerifyEmailForm({ email }: VerifyEmailFormProps) {
 
       <div className="space-y-2">
         <Label>Verification Code</Label>
-        <div className="flex space-x-2">
+        <div className="flex gap-2 justify-center">
           {[0, 1, 2, 3, 4, 5].map((index) => (
             <Input
               key={index}
@@ -137,7 +138,7 @@ export function VerifyEmailForm({ email }: VerifyEmailFormProps) {
               inputMode="numeric"
               maxLength={1}
               value={verificationCode[index]}
-              className="text-center font-mono text-lg h-12 w-12"
+              className="text-center font-mono text-lg  border-2 focus:border-primary"
               onChange={(e) => handleCodeChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
               onPaste={index === 0 ? handlePaste : undefined}
@@ -157,7 +158,7 @@ export function VerifyEmailForm({ email }: VerifyEmailFormProps) {
 
       <Button
         type="submit"
-        className="w-full"
+        className="w-full hover:bg-[#0F4C75]/85 text-white"
         disabled={isSubmitting || verifyEmailMutation.isPending}
       >
         {isSubmitting || verifyEmailMutation.isPending

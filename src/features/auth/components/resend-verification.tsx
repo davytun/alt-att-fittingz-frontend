@@ -27,13 +27,13 @@ export function ResendVerification({ email: _email }: ResendVerificationProps) {
   };
 
   return (
-    <div className="text-center space-y-3">
+    <div className="text-center space-y-3 py-3">
       <p className="text-sm text-gray-600">Didn't receive the code?</p>
       <Button
         variant="outline"
         onClick={handleResend}
         disabled={isResending}
-        className="w-full"
+        className="w-full font-bold text-[#0F4C75]"
       >
         {isResending ? "Sending..." : "Resend Verification Code"}
       </Button>

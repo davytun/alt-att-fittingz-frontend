@@ -16,11 +16,11 @@ export default function VerifyEmailPage() {
   const email = searchParams.get("email");
 
   return (
-    <div className="space-y-6">
-      <Card className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-md mx-auto !shadow-none">
+      <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            Verify Your Email
+            OTP Verification
           </CardTitle>
           <CardDescription className="text-center">
             Enter the 6-digit verification code sent to your email
@@ -32,7 +32,7 @@ export default function VerifyEmailPage() {
       </Card>
 
       {email && (
-        <div className="w-full max-w-md mx-auto">
+        <div className="px-2 w-full max-w-md mx-auto">
           <ResendVerification email={email} />
         </div>
       )}
