@@ -3,7 +3,7 @@ import {
   loginSchema,
   registerSchema,
   resetPasswordSchema,
-  verifyEmailSchema
+  verifyEmailSchema,
 } from "../schemas/auth-schemas";
 
 describe("Auth Schemas", () => {
@@ -94,7 +94,7 @@ describe("Auth Schemas", () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toBe(
-          "Phone number must be at least 10 digits"
+          "Phone number must be at least 10 digits",
         );
       }
     });
@@ -121,7 +121,7 @@ describe("Auth Schemas", () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toBe(
-          "Verification code must be 6 digits"
+          "Verification code must be 6 digits",
         );
       }
     });
@@ -136,7 +136,7 @@ describe("Auth Schemas", () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toBe(
-          "Verification code must contain only numbers"
+          "Verification code must contain only numbers",
         );
       }
     });

@@ -1,4 +1,5 @@
 import type { ApiError } from "@/features/auth/types/auth";
+import { useAuthStore } from "@/lib/store/auth-store";
 
 class ApiClient {
   private baseURL: string;
@@ -9,8 +10,16 @@ class ApiClient {
       process.env.NEXT_PUBLIC_API_BASE_URL ||
       "https://chosen-ophelia-daviwhizzy1-992ca0bc.koyeb.app";
     this.defaultHeaders = {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
     };
+  }
+
+  private handleAuthError() {
+    const { clearAuth } = useAuthStore.getState();
+    clearAuth();
+    if (typeof window !== "undefined") {
+      window.location.href = "/login";
+    }
   }
 
   private isApiErrorLike(data: unknown): data is {
@@ -47,6 +56,14 @@ class ApiClient {
       } else {
         responseData = text;
       }
+    }
+
+    // Debug logging for non-ok responses
+    if (!response.ok) {
+      console.log("API Response Error - Status:", response.status);
+      console.log("API Response Error - StatusText:", response.statusText);
+      console.log("API Response Error - ContentType:", contentType);
+      console.log("API Response Error - ResponseData:", responseData);
     }
 
     // Handle cases where API returns 200 but with error message
@@ -107,12 +124,19 @@ class ApiClient {
       };
     }
 
-    throw {
+    const error = {
       status: response.status,
       message: errorData.message || "An unexpected error occurred",
       errors: errorData.errors,
       errorType: errorData.errorType,
     };
+
+    // Handle 401 errors globally
+    if (response.status === 401) {
+      this.handleAuthError();
+    }
+
+    throw error;
   }
 
   async post<T>(
@@ -121,12 +145,22 @@ class ApiClient {
     options?: RequestInit,
   ): Promise<T> {
     try {
+      const requestBody = data ? JSON.stringify(data) : undefined;
+      const finalHeaders = {
+        ...this.defaultHeaders,
+        ...options?.headers,
+      };
+
       const response = await fetch(`${this.baseURL}${endpoint}`, {
         method: "POST",
-        headers: this.defaultHeaders,
-        body: data ? JSON.stringify(data) : undefined,
-        ...options,
+        headers: finalHeaders,
+        body: requestBody,
       });
+
+      if (!response.ok) {
+        const responseText = await response.clone().text();
+        console.log("Response text:", responseText);
+      }
 
       return await this.handleResponse<T>(response);
     } catch (error) {
