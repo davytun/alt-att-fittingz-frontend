@@ -60,20 +60,20 @@ export function CreateClientForm() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-start gap-3 sm:gap-4">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => router.back()}
-          className="h-9 w-9"
+          className="h-9 w-9 flex-shrink-0"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-gray-900">
             Add New Client
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
             Create a new client profile with their preferences and details
           </p>
         </div>
@@ -146,18 +146,20 @@ export function CreateClientForm() {
         </Card>
 
         {/* Form Actions */}
-        <div className="flex gap-4 justify-end pt-6 border-t border-gray-200">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-end pt-6 border-t border-gray-200 pb-20 sm:pb-0">
           <Button
             type="button"
             variant="outline"
             onClick={() => router.back()}
             disabled={isSubmitting || createMutation.isPending}
+            className="w-full sm:w-auto"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={isSubmitting || createMutation.isPending}
+            className="w-full sm:w-auto"
           >
             {isSubmitting || createMutation.isPending
               ? "Creating Client..."
