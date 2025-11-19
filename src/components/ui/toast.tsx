@@ -66,7 +66,7 @@ function ToastContainer() {
         <div
           key={toast.id}
           className={`
-            p-4 rounded-lg shadow-lg border border-gray-200 bg-white
+            p-4 rounded-lg shadow-lg border border-gray-200 bg-blue-600
             transform transition-all duration-300 ease-in-out
             ${getToastStyles(toast.type)}
           `}
@@ -78,7 +78,7 @@ function ToastContainer() {
                 {toast.title}
               </h4>
               {toast.description && (
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-900 mt-1">
                   {toast.description}
                 </p>
               )}

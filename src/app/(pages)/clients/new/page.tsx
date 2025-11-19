@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CreateClientForm } from "@/features/clients/components/create-client-form";
+import { CreateClientForm } from "@/components/create-client-form";
 
 export const metadata: Metadata = {
   title: "Add Client - Fittingz",

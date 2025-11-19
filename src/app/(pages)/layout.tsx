@@ -1,6 +1,7 @@
 "use client";
 
 import { Notification, ProfileCircle } from "iconsax-react";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { BottomNav } from "@/components/bottom-nav";
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const isMobile = useIsMobile();
 
   return (
-    <SidebarProvider>
+    <SidebarProvider suppressHydrationWarning>
       {isMobile ? <BottomNav /> : <AppSidebar />}
       <SidebarInset>
         <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center border-b bg-white px-4">
@@ -30,6 +31,17 @@ export default function RootLayout({ children }: RootLayoutProps) {
               orientation="vertical"
               className="data-[orientation=vertical]:h-4"
             />
+          </div>
+          <div suppressHydrationWarning>
+            {isMobile && (
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={48}
+                height={48}
+                className="h-8 w-auto"
+              />
+            )}
           </div>
           <div className="flex items-center gap-2 ml-auto">
             <Button variant="ghost" size="icon" className="rounded-full">

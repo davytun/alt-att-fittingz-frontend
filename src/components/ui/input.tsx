@@ -13,7 +13,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const colorStyles = error
       ? "border-red-500 focus-visible:border-red-500"
-      : "border-gray-300 focus-visible:border-[#0F4C75]";
+      : "border-[#0F4C75] focus-visible:border-[#0F4C75]";
 
     return (
       <input

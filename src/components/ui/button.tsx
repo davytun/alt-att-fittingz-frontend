@@ -1,4 +1,5 @@
 import * as React from "react";
+import { poppins } from "@/components/ui/fonts";
 import { cn } from "@/lib/utils";
 
 export interface ButtonProps
@@ -19,9 +20,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         type={props.type ?? "button"}
         className={cn(
+          poppins.className,
           "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
           {
-            "bg-[#0F4C75] text-white hover:bg-blue-700": variant === "default",
+            "bg-[#0F4C75] text-white hover:bg-[#0F4C75]/90":
+              variant === "default",
             "bg-red-600 text-white hover:bg-red-700": variant === "destructive",
             "border border-gray-300 bg-white hover:bg-gray-100":
               variant === "outline",

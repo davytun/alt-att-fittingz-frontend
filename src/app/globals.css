@@ -49,6 +49,9 @@
   /* Primary Text | Secondary Text & icons */
   --primary-text-dark: #222831;
   --secondary-text-white: #a1a1a1;
+  --text-color: #222831;
+
+  --btn-color-1: #3282b8;
 
   /* Secondary (for hover cards) */
   --secondary-teal-blue: #222886;
@@ -130,8 +133,5 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }

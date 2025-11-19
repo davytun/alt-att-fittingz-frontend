@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { type ReactNode, useEffect } from "react";
-import { useAuth } from "@/features/auth/hooks/use-auth";
+import { useAuth } from "@/hooks/use-auth";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -14,41 +14,34 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Don't redirect from password reset pages even if authenticated
+    if (isLoading) return; // Wait until authentication status is resolved
+
     const isPasswordResetPage =
       pathname.includes("/forgot-password") ||
       pathname.includes("/verify-reset-code") ||
       pathname.includes("/reset-password");
 
-    // Only redirect from login/register pages if authenticated
-    if (!isLoading && isAuthenticated && !isPasswordResetPage) {
+    if (isAuthenticated && !isPasswordResetPage) {
       router.push("/dashboard");
     }
   }, [isAuthenticated, isLoading, router, pathname]);
 
-  // Show loading while checking auth state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  // Don't render auth pages if authenticated (except password reset pages)
+  // Show a loader while auth status is loading or while redirecting the user.
+  // This prevents a flash of the auth form when the user is already logged in.
   const isPasswordResetPage =
     pathname.includes("/forgot-password") ||
     pathname.includes("/verify-reset-code") ||
     pathname.includes("/reset-password");
 
-  if (isAuthenticated && !isPasswordResetPage) {
+  if (isLoading || (isAuthenticated && !isPasswordResetPage)) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
       </div>
     );
   }
 
+  // If not loading and not authenticated (or on a password reset page), render the children.
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       {children}

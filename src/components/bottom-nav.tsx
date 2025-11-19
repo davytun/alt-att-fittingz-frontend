@@ -19,11 +19,7 @@ const navItems = [
     url: "/inspiration",
     icon: Gallery,
   },
-  {
-    title: "Profile",
-    url: "/profile",
-    icon: Profile2User,
-  },
+
   {
     title: "Settings",
     url: "/settings",
@@ -36,7 +32,7 @@ export function BottomNav() {
 
   return (
     <div className="fixed bottom-0 left-0 z-20 w-full border-t bg-white md:hidden px-4.5">
-      <div className="mx-auto grid h-16 max-w-lg grid-cols-5 font-medium">
+      <div className="mx-auto grid h-16 max-w-lg grid-cols-4 font-medium">
         {navItems.map((item) => {
           const isActive =
             pathname === item.url || pathname.startsWith(`${item.url}/`);

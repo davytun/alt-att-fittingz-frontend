@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { VerifyResetCodeForm } from "@/features/auth/components/verify-reset-code-form";
+import { VerifyResetCodeForm } from "@/components/verify-reset-code-form";
 
 export const metadata: Metadata = {
   title: "Verify Reset Code - Admin Dashboard",

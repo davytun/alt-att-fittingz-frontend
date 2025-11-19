@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { Admin, AuthState } from "@/features/auth/types/auth";
+import type { Admin, AuthState } from "@/types/auth";
+import { tokenManager } from "@/lib/token-manager";
 
 interface AuthStore extends AuthState {
   setAuth: (admin: Admin, token: string) => void;
@@ -47,21 +48,30 @@ export const useAuthStore = create<AuthStore>()(
       isAuthenticated: false,
       isLoading: true, // Start with loading true
 
-      setAuth: (admin: Admin, token: string) =>
+      setAuth: (admin: Admin, token: string) => {
+        console.log("Setting auth:", { admin: !!admin, token: !!token });
         set({
           admin,
           token,
-          isAuthenticated: true,
+          isAuthenticated: !!(admin && token),
           isLoading: false,
-        }),
+        });
+        
+        // Start auto-refresh when authenticated
+        if (admin && token) {
+          tokenManager.startAutoRefresh();
+        }
+      },
 
-      clearAuth: () =>
+      clearAuth: () => {
+        tokenManager.stopAutoRefresh();
         set({
           admin: null,
           token: null,
           isAuthenticated: false,
           isLoading: false,
-        }),
+        });
+      },
 
       setLoading: (isLoading: boolean) => set({ isLoading }),
 
@@ -81,8 +91,21 @@ export const useAuthStore = create<AuthStore>()(
         isAuthenticated: state.isAuthenticated,
       }),
       onRehydrateStorage: () => (state) => {
-        // This runs after rehydration is complete
-        state?.hydrate();
+        // Validate auth state on rehydration
+        if (state) {
+          const hasValidAuth = !!(state.admin && state.token);
+          console.log("Rehydrating auth:", { hasValidAuth, admin: !!state.admin, token: !!state.token });
+          
+          if (!hasValidAuth) {
+            state.clearAuth();
+          } else {
+            state.isAuthenticated = true;
+            // Start auto-refresh on rehydration if authenticated
+            tokenManager.startAutoRefresh();
+          }
+          
+          state.hydrate();
+        }
       },
     },
   ),

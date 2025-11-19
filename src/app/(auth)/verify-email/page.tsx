@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { ResendVerification } from "@/components/resend-verification";
 import {
   Card,
   CardContent,
@@ -8,8 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ResendVerification } from "@/features/auth/components/resend-verification";
-import { VerifyEmailForm } from "@/features/auth/components/verify-email-form";
+import { VerifyEmailForm } from "@/components/verify-email-form";
 
 export default function VerifyEmailPage() {
   const searchParams = useSearchParams();

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
 import { Raleway } from "next/font/google";
+import { ClientWrapper } from "@/components/client-wrapper";
 import { Toaster } from "@/components/ui/sonner";
-import { Providers } from "@/providers/providers";
 
 const raleway = Raleway({ subsets: ["latin"] });
 
@@ -23,10 +23,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={`${raleway.className} antialiased`}
         suppressHydrationWarning
       >
-        <Providers>
+        <ClientWrapper>
           {children}
           <Toaster />
-        </Providers>
+        </ClientWrapper>
       </body>
     </html>
   );
