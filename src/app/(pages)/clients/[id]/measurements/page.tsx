@@ -61,7 +61,6 @@ export default function MeasurementsPage({
       </div>
 
       <MeasurementsForm
-        clientId={id}
         onSave={handleSave}
         onCancel={handleCancel}
         isLoading={saveMutation.isPending}
