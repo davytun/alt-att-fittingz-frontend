@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useVerifyEmailMutation } from "@/hooks/use-auth-mutation";
+import { useVerifyEmail } from "@/hooks/api/use-auth";
 import {
   type VerifyEmailFormData,
   verifyEmailSchema,
@@ -41,7 +41,7 @@ export function VerifyEmailForm({ email }: VerifyEmailFormProps) {
 
   const [serverError, setServerError] = useState<string>("");
 
-  const verifyEmailMutation = useVerifyEmailMutation();
+  const verifyEmailMutation = useVerifyEmail();
 
   const onSubmit = async (data: VerifyEmailFormData) => {
     setServerError("");

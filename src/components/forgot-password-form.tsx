@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForgotPasswordMutation } from "@/hooks/use-auth-mutation";
+import { useForgotPassword } from "@/hooks/api/use-auth";
 import {
   type ForgotPasswordFormData,
   forgotPasswordSchema,
@@ -36,7 +36,7 @@ export function ForgotPasswordForm() {
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
 
-  const forgotPasswordMutation = useForgotPasswordMutation();
+  const forgotPasswordMutation = useForgotPassword();
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     setServerError("");
@@ -110,7 +110,7 @@ export function ForgotPasswordForm() {
               type="email"
               placeholder="Enter your registered email"
               {...register("email")}
-              error={errors.email?.message}
+
             />
           </div>
 

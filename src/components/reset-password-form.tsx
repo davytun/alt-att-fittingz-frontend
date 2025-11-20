@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useResetPasswordMutation } from "@/hooks/use-auth-mutation";
+import { useResetPassword } from "@/hooks/api/use-auth";
 import {
   type ResetPasswordFormData,
   resetPasswordSchema,
@@ -38,7 +38,7 @@ export function ResetPasswordForm() {
   });
 
   const [serverError, setServerError] = useState<string>("");
-  const resetPasswordMutation = useResetPasswordMutation();
+  const resetPasswordMutation = useResetPassword();
 
   const onSubmit = async (data: ResetPasswordFormData) => {
     setServerError("");
@@ -117,7 +117,7 @@ export function ResetPasswordForm() {
               placeholder="Enter your new password"
               autoComplete="new-password"
               {...register("newPassword")}
-              error={errors.newPassword?.message}
+
             />
             <p className="text-xs text-gray-500">
               Must be at least 8 characters with uppercase, lowercase, number,
@@ -133,7 +133,7 @@ export function ResetPasswordForm() {
               placeholder="Confirm your new password"
               autoComplete="new-password"
               {...register("confirmPassword")}
-              error={errors.confirmPassword?.message}
+
             />
           </div>
 

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRegisterMutation } from "@/hooks/use-auth-mutation";
+import { useRegister } from "@/hooks/api/use-auth";
 import { type RegisterFormData, registerSchema } from "@/lib/auth-schemas";
 
 export function RegisterForm() {
@@ -33,7 +33,7 @@ export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const registerMutation = useRegisterMutation();
+  const registerMutation = useRegister();
 
   const onSubmit = async (data: RegisterFormData) => {
     setServerError(""); // Clear previous errors
@@ -151,7 +151,7 @@ export function RegisterForm() {
               type="email"
               placeholder="Enter your email"
               {...register("email")}
-              error={errors.email?.message}
+
               className="transition-all duration-200 text-[#222831]"
             />
             {errors.email && (
@@ -176,7 +176,7 @@ export function RegisterForm() {
                 placeholder="Create a password"
                 autoComplete="new-password"
                 {...register("password")}
-                error={errors.password?.message}
+
                 className="pr-10 transition-all duration-200 text-[#222831]"
               />
               <button
@@ -213,7 +213,7 @@ export function RegisterForm() {
                 placeholder="Confirm your password"
                 autoComplete="new-password"
                 {...register("confirmPassword")}
-                error={errors.confirmPassword?.message}
+
                 className="pr-10 transition-all duration-200 text-[#222831]"
               />
               <button
@@ -244,7 +244,7 @@ export function RegisterForm() {
               type="text"
               placeholder="Your business name"
               {...register("businessName")}
-              error={errors.businessName?.message}
+
               className="transition-all duration-200 text-[#222831]"
             />
             {errors.businessName && (
@@ -267,7 +267,7 @@ export function RegisterForm() {
               type="tel"
               placeholder="Your phone number"
               {...register("contactPhone")}
-              error={errors.contactPhone?.message}
+
               className="transition-all duration-200 text-[#222831]"
             />
             {errors.contactPhone && (
@@ -290,7 +290,7 @@ export function RegisterForm() {
               type="text"
               placeholder="Your business address"
               {...register("businessAddress")}
-              error={errors.businessAddress?.message}
+
               className="transition-all duration-200 text-[#222831]"
             />
             {errors.businessAddress && (
