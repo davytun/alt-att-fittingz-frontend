@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useVerifyResetCodeMutation } from "@/hooks/use-auth-mutation";
+import { useVerifyResetCode } from "@/hooks/api/use-auth";
 import {
   type VerifyResetCodeFormData,
   verifyResetCodeSchema,
@@ -41,7 +41,7 @@ export function VerifyResetCodeForm() {
   });
 
   const [serverError, setServerError] = useState<string>("");
-  const verifyResetCodeMutation = useVerifyResetCodeMutation();
+  const verifyResetCodeMutation = useVerifyResetCode();
 
   // Update form value when resetCode changes
   useEffect(() => {

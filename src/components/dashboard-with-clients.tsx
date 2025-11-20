@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useClients } from "@/hooks/use-client-queries";
+import { useClientList } from "@/hooks/api/use-clients";
 import { formatClientName } from "@/lib/client-utils";
 
 export function DashboardWithClients() {
-  const { data: clientsData } = useClients(1, 5);
+  const { data: clientsData } = useClientList(1, 5);
   const router = useRouter();
 
   const totals = useMemo(() => {
@@ -133,8 +133,7 @@ export function DashboardWithClients() {
         <CardContent className="space-y-3 pt-0">
           {recentClients.length > 0 ? (
             recentClients.map((client) => {
-              const latestMeasurementDate =
-                client.measurements[0]?.updatedAt || client.updatedAt;
+              const latestMeasurementDate = client.updatedAt;
               const formattedDate = latestMeasurementDate
                 ? new Date(latestMeasurementDate).toLocaleDateString()
                 : "";

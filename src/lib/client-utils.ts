@@ -1,4 +1,4 @@
-import type { Client } from "@/types/client";
+import type { Client } from "@/lib/api/types";
 
 // Format client data for display
 export const formatClientName = (client: Client): string => {
@@ -81,7 +81,6 @@ export const exportClientsToCSV = (clients: Client[]): string => {
     "Phone",
     "Email",
     "Gender",
-    "Body Shape",
     "Created At",
   ];
   const rows = clients.map((client) => [
@@ -89,7 +88,6 @@ export const exportClientsToCSV = (clients: Client[]): string => {
     client.phone,
     client.email,
     client.gender,
-    client.bodyShape?.trim() ? client.bodyShape : "N/A",
     new Date(client.createdAt).toLocaleDateString(),
   ]);
 

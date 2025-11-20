@@ -33,6 +33,11 @@ interface ResetPasswordData {
   newPassword: string;
 }
 
+interface VerifyResetCodeData {
+  email: string;
+  resetCode: string;
+}
+
 export function useLogin() {
   const router = useRouter();
   const { setAuth } = useAuth();
@@ -131,6 +136,26 @@ export function useForgotPassword() {
     onError: () => {
       toast.error("Failed to Send", {
         description: "Failed to send reset code. Please try again.",
+      });
+    },
+  });
+}
+
+export function useVerifyResetCode() {
+  return useMutation({
+    mutationFn: (data: VerifyResetCodeData) =>
+      apiClient<{ message: string }>(endpoints.auth.verifyResetCode, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+    onSuccess: (data) => {
+      toast.success("Code Verified", {
+        description: data.message || "Reset code verified successfully.",
+      });
+    },
+    onError: () => {
+      toast.error("Verification Failed", {
+        description: "Invalid reset code. Please try again.",
       });
     },
   });

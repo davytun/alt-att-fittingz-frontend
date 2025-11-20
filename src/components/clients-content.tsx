@@ -80,7 +80,10 @@ export function ClientsContent() {
       <ClientsList
         clients={clients}
         searchTerm={searchTerm}
-        pagination={pagination}
+        pagination={pagination ? {
+          ...pagination,
+          pageSize: pagination.limit
+        } : undefined}
         onPageChange={setPage}
       />
     </div>

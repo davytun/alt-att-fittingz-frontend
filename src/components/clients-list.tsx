@@ -4,7 +4,7 @@ import { Call } from "iconsax-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type { Client } from "../types/client";
+import type { Client } from "@/lib/api/types";
 
 interface ClientsListProps {
   clients: Client[];
