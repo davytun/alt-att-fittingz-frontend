@@ -9,6 +9,11 @@ export interface LoginResponse {
     id: string;
     email: string;
     businessName: string;
+    contactPhone?: string;
+    businessAddress?: string;
+    isVerified?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
   };
 }
 
@@ -30,9 +35,19 @@ export const authUtils = {
 
     const data: LoginResponse = await response.json();
     
-    // Store auth data
+    // Store auth data with complete Admin object
     const { setAuth } = useAuthStore.getState();
-    setAuth(data.admin, data.token);
+    const completeAdmin = {
+      id: data.admin.id,
+      email: data.admin.email,
+      businessName: data.admin.businessName,
+      contactPhone: data.admin.contactPhone || '',
+      businessAddress: data.admin.businessAddress || '',
+      isVerified: data.admin.isVerified || false,
+      createdAt: data.admin.createdAt || new Date().toISOString(),
+      updatedAt: data.admin.updatedAt || new Date().toISOString(),
+    };
+    setAuth(completeAdmin, data.token);
     
     return data;
   },
@@ -54,9 +69,19 @@ export const authUtils = {
 
     const data: LoginResponse = await response.json();
     
-    // Store auth data
+    // Store auth data with complete Admin object
     const { setAuth } = useAuthStore.getState();
-    setAuth(data.admin, data.token);
+    const completeAdmin = {
+      id: data.admin.id,
+      email: data.admin.email,
+      businessName: data.admin.businessName,
+      contactPhone: data.admin.contactPhone || '',
+      businessAddress: data.admin.businessAddress || '',
+      isVerified: data.admin.isVerified || false,
+      createdAt: data.admin.createdAt || new Date().toISOString(),
+      updatedAt: data.admin.updatedAt || new Date().toISOString(),
+    };
+    setAuth(completeAdmin, data.token);
     
     return data;
   },
