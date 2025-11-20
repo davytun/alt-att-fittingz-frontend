@@ -33,20 +33,28 @@ export interface UpdateMeasurementRequest {
 
 export const measurementsApi = {
   getMeasurements: (clientId: string): Promise<Measurement[]> =>
-    apiClient.get<Measurement[]>(`/api/clients/${clientId}/measurements`),
+    apiClient<Measurement[]>(`/clients/${clientId}/measurements`),
 
   createMeasurement: (
     clientId: string,
     data: CreateMeasurementRequest,
   ): Promise<Measurement> =>
-    apiClient.post<Measurement>(`/api/clients/${clientId}/measurements`, data),
+    apiClient<Measurement>(`/clients/${clientId}/measurements`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 
   updateMeasurement: (
     id: string,
     data: UpdateMeasurementRequest,
   ): Promise<Measurement> =>
-    apiClient.put<Measurement>(`/api/clients/measurements/${id}`, data),
+    apiClient<Measurement>(`/clients/measurements/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
 
   deleteMeasurement: (id: string): Promise<{ message: string }> =>
-    apiClient.delete<{ message: string }>(`/api/clients/measurements/${id}`),
+    apiClient<{ message: string }>(`/clients/measurements/${id}`, {
+      method: "DELETE",
+    }),
 };
