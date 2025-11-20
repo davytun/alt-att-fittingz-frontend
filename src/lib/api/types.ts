@@ -53,3 +53,15 @@ export type CreateClientData = Pick<
   "name" | "email" | "phone" | "gender"
 >;
 export type UpdateClientData = Partial<CreateClientData>;
+
+export interface AppError {
+  status: number;
+  message: string;
+  errors?: Array<{
+    msg: string;
+    param: string;
+    location: string;
+    value: string;
+  }>;
+  errorType?: string;
+}
