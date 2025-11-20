@@ -47,8 +47,8 @@ export function ClientsList({ clients, searchTerm }: ClientsListProps) {
               </Button>
             </div>
             <div className="text-lg font-medium text-[#222831]">
-              {client._count?.orders || 0} Order •{" "}
-              {client._count?.measurements || 0} Measurement
+              {client._count?.measurements || 0} Measurements •{" "}
+              {client._count?.styleImages || 0} Style Images
             </div>
           </CardContent>
         </Card>
