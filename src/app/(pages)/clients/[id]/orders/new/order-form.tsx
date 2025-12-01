@@ -46,7 +46,9 @@ interface OrderFormProps {
 const ORDER_STATUSES = [
   { value: "PENDING_PAYMENT", label: "Pending Payment" },
   { value: "PROCESSING", label: "Processing" },
-  { value: "IN_PROGRESS", label: "In Progress" },
+  { value: "READY_FOR_PICKUP", label: "Ready for Pickup" },
+  { value: "SHIPPED", label: "Shipped" },
+  { value: "DELIVERED", label: "Delivered" },
   { value: "COMPLETED", label: "Completed" },
   { value: "CANCELLED", label: "Cancelled" },
 ] as const;
@@ -73,8 +75,8 @@ const formSchema = z.object({
   dueDate: z.date(),
   note: z.string().optional(),
   measurementId: z.string().optional(),
-  deposit: z.number().min(0, "Deposit must be positive"),
-  price: z.number().min(0, "Total price must be positive"),
+  deposit: z.number().min(0, "Deposit must be positive").max(999999999, "Deposit too large"),
+  price: z.number().min(0, "Total price must be positive").max(999999999, "Price too large"),
   styleDescription: z.string().optional(),
   details: z.object({
     fabric: z.string(),
@@ -106,6 +108,7 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
       price: 0,
       styleDescription: "",
       note: "",
+      measurementId: "",
       details: {
         fabric: "",
         color: "",
@@ -137,13 +140,36 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
       toast.success("Order created successfully!");
       router.push(`/clients/${clientId}`);
     },
-    onError: (error: Error) => {
-      toast.error(error.message || "Failed to create order");
+    onError: (error: any) => {
+      console.error('Order creation error:', error);
+      console.error('Error status:', error?.status);
+      console.error('Error details:', error);
+      // APIError from our client has the message from backend
+      const errorMessage = error?.message || "Failed to create order";
+      toast.error(`Validation Error: ${errorMessage}`);
     },
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log("Form submitted with data:", data);
+
+    let styleImageIds: string[] = [];
+
+    // Upload images first if any are selected
+    if (styleImages.length > 0) {
+      try {
+        const { stylesApi } = await import("@/lib/api/styles");
+        const uploadedImages = await stylesApi.uploadClientImages(clientId, {
+          images: styleImages,
+          category: "order",
+          description: "Order style inspiration"
+        });
+        styleImageIds = uploadedImages.map(img => img.id);
+      } catch (error) {
+        console.error("Image upload failed:", error);
+        toast.error("Failed to upload images. Order will be created without images.");
+      }
+    }
 
     const orderData: CreateOrderRequest = {
       details: data.details,
@@ -154,8 +180,8 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
       deposit: data.deposit,
       styleDescription: data.styleDescription || "Style inspiration attached",
       note: data.note || "",
-      measurementId: data.measurementId,
-      styleImageIds: [], // TODO: Upload images first and get IDs
+      measurementId: data.measurementId || undefined,
+      styleImageIds,
     };
 
     console.log("Sending order data to API:", orderData);
@@ -309,8 +335,8 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
         <div className="space-y-2">
           <Label htmlFor="measurementId">Link Client Measurement</Label>
           <Select
-            value={watch("measurementId")}
-            onValueChange={(value) => setValue("measurementId", value)}
+            value={watch("measurementId") || ""}
+            onValueChange={(value) => setValue("measurementId", value || "")}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select measurement" />
@@ -394,6 +420,8 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
               type="number"
               placeholder="0"
               min="0"
+              max="999999999"
+              step="1"
             />
             {errors.deposit && (
               <p className="text-sm text-red-600">{errors.deposit.message}</p>
@@ -408,6 +436,8 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
               type="number"
               placeholder="1200"
               min="0"
+              max="999999999"
+              step="1"
             />
             {errors.price && (
               <p className="text-sm text-red-600">{errors.price.message}</p>

@@ -1,0 +1,18 @@
+{
+  "errors": [
+    {
+      "location": "body",
+      "msg": "Invalid value",
+      "path": "orderId",
+      "type": "field",
+      "value": null
+    },
+    {
+      "location": "body",
+      "msg": "Order ID must be a valid CUID (25–30 characters).",
+      "path": "orderId",
+      "type": "field",
+      "value": null
+    }
+  ]
+}

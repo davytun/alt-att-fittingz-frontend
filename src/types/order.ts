@@ -8,15 +8,16 @@ export interface Order {
   id: string;
   orderNumber: string;
   details: OrderDetails;
-  price: number;
+  price: string | number; // Backend returns string, frontend uses number
   currency: string;
   dueDate: string;
   status: OrderStatus;
-  deposit: number;
-  styleDescription: string;
-  note: string;
+  deposit: string | number; // Backend returns string, frontend uses number
+  styleDescription: string | null;
+  note: string | null;
   totalPaid: number;
   outstandingBalance: number;
+  measurementId?: string;
   createdAt: string;
   updatedAt: string;
   client: {
@@ -24,9 +25,14 @@ export interface Order {
   };
   project?: {
     name: string;
-  };
+  } | null;
   event?: {
     name: string;
+  } | null;
+  measurement?: {
+    id: string;
+    name: string;
+    fields: Record<string, unknown>;
   };
   payments: Payment[];
   styleImages: StyleImageRef[];

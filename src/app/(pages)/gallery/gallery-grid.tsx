@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
+import { useAuthStore } from "@/lib/store/auth-store";
 import {
   Search,
   Plus,
   Trash2,
-  X,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -69,14 +70,14 @@ export function GalleryGrid() {
         const descriptionMatch = (image.description || "")
           .toLowerCase()
           .includes(query);
-        // We don't have client name directly on the image object usually, unless populated.
-        // Assuming basic filtering for now.
         return categoryMatch || descriptionMatch;
       }
 
       return true;
     });
   }, [imagesData, selectedClientId, searchQuery]);
+
+  const { isAuthenticated, isLoading: authLoading } = useAuthStore();
 
   // Helper to find client name for an image
   const getClientName = (clientId?: string) => {
@@ -201,18 +202,24 @@ export function GalleryGrid() {
       )}
 
       {/* Grid */}
-      {isError ? (
+      {!isAuthenticated && !authLoading ? (
+        <div className="text-center py-12 text-gray-500">
+          Please log in to view inspirations.
+        </div>
+      ) : isError ? (
         <div className="text-center py-12 text-red-500">
           Failed to load inspirations. Please try again later.
         </div>
-      ) : isLoading ? (
+      ) : isLoading || authLoading ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse"
-            />
-          ))}
+          <div className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="aspect-3/4 bg-gray-200 rounded-lg animate-pulse" />
         </div>
       ) : filteredImages.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
@@ -221,8 +228,9 @@ export function GalleryGrid() {
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredImages.map((image) => (
-            <div
+            <button
               key={image.id}
+              type="button"
               onClick={() => {
                 if (isSelectionMode) {
                   toggleImageSelection(image.id);
@@ -230,12 +238,13 @@ export function GalleryGrid() {
                   setEditingInspiration(image);
                 }
               }}
-              className="group relative aspect-3/4 cursor-pointer overflow-hidden rounded-xl bg-gray-100"
+              className="group relative aspect-3/4 cursor-pointer overflow-hidden rounded-xl bg-gray-100 border-0 p-0"
             >
-              <img
+              <Image
                 src={image.imageUrl}
                 alt={image.category || "Inspiration"}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
 
               {/* Selection Checkbox */}
@@ -259,7 +268,7 @@ export function GalleryGrid() {
                   </p>
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       )}

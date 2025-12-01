@@ -32,7 +32,7 @@ export const ordersApi = {
 
   // Get single order
   getOrder: (clientId: string, orderId: string): Promise<Order> =>
-    apiClient(`/clients/${clientId}/orders/${orderId}`),
+    apiClient(`/clients/${clientId}/orders/${orderId}?include=measurement`),
 
   // Update order
   updateOrder: (clientId: string, orderId: string, data: UpdateOrderRequest): Promise<Order> =>

@@ -62,8 +62,15 @@ export async function apiClient<T>(
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
+    // For validation errors, include detailed error information
+    let errorMessage = error.message || "Request failed";
+    if (error.errors && Array.isArray(error.errors)) {
+      errorMessage = error.errors.map((e: any) => e.message || e).join(', ');
+    } else if (error.details) {
+      errorMessage = error.details;
+    }
     throw new APIError(
-      error.message || "Request failed",
+      errorMessage,
       response.status,
       error.code,
     );

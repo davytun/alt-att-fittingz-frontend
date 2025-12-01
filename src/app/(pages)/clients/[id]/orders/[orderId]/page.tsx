@@ -11,8 +11,8 @@ import {
   CheckCircle,
   Banknote,
   Trash2,
-  Upload,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -114,13 +114,7 @@ export default function OrderDetailPage({
     queryFn: () => measurementsApi.getMeasurements(clientId),
   });
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm<FormData>({
+  const { register, handleSubmit, watch, setValue } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     values: order
       ? {
@@ -128,9 +122,15 @@ export default function OrderDetailPage({
           currency: order.currency,
           dueDate: new Date(order.dueDate),
           note: order.note || "",
-          measurementId: undefined, // Will be populated if available
-          deposit: order.deposit,
-          price: order.price,
+          measurementId: order.measurementId || "",
+          deposit:
+            typeof order.deposit === "string"
+              ? parseFloat(order.deposit)
+              : order.deposit,
+          price:
+            typeof order.price === "string"
+              ? parseFloat(order.price)
+              : order.price,
           details: order.details,
         }
       : undefined,
@@ -368,6 +368,57 @@ export default function OrderDetailPage({
           </div>
         </div>
 
+        {/* Details Section */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900">Details</h2>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="fabric">Fabric</Label>
+              {isEditing ? (
+                <Input {...register("details.fabric")} />
+              ) : (
+                <Input
+                  value={order.details.fabric || ""}
+                  disabled
+                  className="bg-gray-50"
+                />
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="color">Color</Label>
+              {isEditing ? (
+                <Input {...register("details.color")} />
+              ) : (
+                <Input
+                  value={order.details.color || ""}
+                  disabled
+                  className="bg-gray-50"
+                />
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="details.notes">Detail Notes</Label>
+            {isEditing ? (
+              <Textarea
+                {...register("details.notes")}
+                rows={3}
+                className="resize-none"
+              />
+            ) : (
+              <Textarea
+                value={order.details.notes || ""}
+                disabled
+                className="bg-gray-50 resize-none"
+                rows={3}
+              />
+            )}
+          </div>
+        </div>
+
         {/* Measurement Section */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -398,12 +449,17 @@ export default function OrderDetailPage({
             </Select>
           ) : (
             <>
-              {/* Find linked measurement from the order or form */}
+              {/* Find linked measurement from the order */}
               {(() => {
-                const linkedMeasurement = measurements.find(
-                  (m) =>
-                    m.id === watch("measurementId") || m.orderId === order.id
-                );
+                // First try to use the measurement from the order response
+                let linkedMeasurement = order.measurement;
+
+                // If not available, try to find it in the measurements list
+                if (!linkedMeasurement && order.measurementId) {
+                  linkedMeasurement = measurements.find(
+                    (m) => m.id === order.measurementId
+                  );
+                }
 
                 if (!linkedMeasurement) {
                   return (
@@ -476,7 +532,10 @@ export default function OrderDetailPage({
                 />
               ) : (
                 <Input
-                  value={order.deposit.toLocaleString()}
+                  value={(typeof order.deposit === "string"
+                    ? parseFloat(order.deposit)
+                    : order.deposit
+                  ).toLocaleString()}
                   disabled
                   className="bg-gray-50"
                 />
@@ -494,7 +553,10 @@ export default function OrderDetailPage({
                 />
               ) : (
                 <Input
-                  value={order.price.toLocaleString()}
+                  value={(typeof order.price === "string"
+                    ? parseFloat(order.price)
+                    : order.price
+                  ).toLocaleString()}
                   disabled
                   className="bg-gray-50"
                 />
@@ -504,23 +566,50 @@ export default function OrderDetailPage({
         </div>
 
         {/* Style Inspirations */}
-        {order.styleImages && order.styleImages.length > 0 && (
-          <div className="space-y-4">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-900">
               Style Inspirations
+              {order.styleImages && order.styleImages.length > 0 && (
+                <span className="ml-2 text-sm font-normal text-gray-500">
+                  ({order.styleImages.length})
+                </span>
+              )}
             </h2>
-            <div className="grid grid-cols-2 gap-4">
-              {order.styleImages.map((img, index) => (
-                <img
-                  key={index}
-                  src={img.styleImage.imageUrl}
-                  alt={img.styleImage.description || "Style inspiration"}
-                  className="w-full h-48 object-cover rounded-lg"
-                />
+          </div>
+
+          {order.styleImages && order.styleImages.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {order.styleImages.map((img) => (
+                <div
+                  key={img.styleImage.id}
+                  className="relative aspect-square w-full rounded-lg overflow-hidden group"
+                >
+                  <Image
+                    src={img.styleImage.imageUrl}
+                    alt={img.styleImage.description || "Style inspiration"}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  {img.styleImage.description && (
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <p className="text-white text-sm line-clamp-2">
+                        {img.styleImage.description}
+                      </p>
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+              <p>No style inspirations linked to this order</p>
+              <p className="text-sm mt-1">
+                Style inspirations can be added from the client profile
+              </p>
+            </div>
+          )}
+        </div>
 
         {/* Order Summary */}
         <div className="space-y-4 bg-gray-50 p-6 rounded-lg">
@@ -535,7 +624,12 @@ export default function OrderDetailPage({
                 <p className="text-sm text-gray-600">Total Amount</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {watch("currency")}{" "}
-                  {(isEditing ? totalPrice : order.price).toLocaleString()}
+                  {(isEditing
+                    ? totalPrice
+                    : typeof order.price === "string"
+                    ? parseFloat(order.price)
+                    : order.price
+                  ).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -562,7 +656,13 @@ export default function OrderDetailPage({
                   {watch("currency")}{" "}
                   {(isEditing
                     ? outstandingBalance
-                    : order.outstandingBalance || order.price - order.deposit
+                    : order.outstandingBalance ||
+                      (typeof order.price === "string"
+                        ? parseFloat(order.price)
+                        : order.price) -
+                        (typeof order.deposit === "string"
+                          ? parseFloat(order.deposit)
+                          : order.deposit)
                   ).toLocaleString()}
                 </p>
               </div>

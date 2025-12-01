@@ -102,7 +102,7 @@ export const stylesApi = {
 
   // Get admin style images
   getAdminImages: (page = 1, pageSize = 10): Promise<StyleImagesResponse> =>
-    apiClient(`/clients/admin/styles?page=${page}&pageSize=${pageSize}`),
+    apiClient(`/admin/styles?page=${page}&pageSize=${pageSize}`),
 
   // Get single style image
   getStyleImage: (clientId: string, imageId: string): Promise<StyleImage> =>
