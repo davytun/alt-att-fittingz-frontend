@@ -83,7 +83,7 @@ export const adminSchema = z.object({
   contactPhone: z.string(),
   businessAddress: z.string(),
   profileImageUrl: z.string().optional(),
-  isEmailVerified: z.boolean(),
+  isVerified: z.boolean(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
