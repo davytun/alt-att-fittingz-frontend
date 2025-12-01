@@ -1,6 +1,6 @@
 "use client";
 
-import { Add, ArrowRight2, Notification, User } from "iconsax-react";
+import { ArrowRight2, Notification, User } from "iconsax-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { useClientList } from "@/hooks/api/use-clients";
 import { DashboardSkeleton } from "./dashboard-skeleton";
+import { Plus } from "lucide-react";
 
 export function DashboardContent() {
   const { admin } = useAuth();
@@ -116,12 +117,12 @@ export function DashboardContent() {
               className="bg-white text-[#0F4C75] hover:bg-white/90"
               onClick={() => router.push("/clients/new")}
             >
-              <Add color="#0F4C75" className="mr-2 h-5 w-5" />
+              <Plus color="#0F4C75" className="mr-2 h-5 w-5" />
               New Client
             </Button>
             <Button
               variant="outline"
-              className=" bg-transparent/50 border-white text-white hover:bg-white/10"
+              className=" bg-transparent/50 border-white text-white"
               onClick={() =>
                 toast.info("Orders will be available soon", {
                   description:
@@ -129,7 +130,7 @@ export function DashboardContent() {
                 })
               }
             >
-              <Add color="#0F4C75" className="mr-2 h-5 w-5" />
+              <Plus className="mr-2 h-5 w-5" />
               New Order
             </Button>
           </div>
