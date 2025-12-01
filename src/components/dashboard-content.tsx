@@ -97,7 +97,7 @@ export function DashboardContent() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-16">
       {/* Header */}
       <section className="relative overflow-hidden rounded-3xl bg-[#0F4C75] px-6 py-8 text-white shadow-sm">
         <div className="absolute -top-16 right-0 h-40 w-40 rounded-full bg-white/10" />
