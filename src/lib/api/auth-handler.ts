@@ -1,6 +1,6 @@
 import { useAuthStore } from "@/lib/store/auth-store";
-import type { ErrorHandler } from "./error-handler";
 import { APIError } from "./client";
+import type { ErrorHandler } from "./error-handler";
 
 export class AuthHandler {
   private refreshInFlight: Promise<void> | null = null;

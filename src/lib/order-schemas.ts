@@ -11,7 +11,7 @@ export const orderStatusSchema = z.enum([
   "PROCESSING",
   "IN_PROGRESS",
   "COMPLETED",
-  "CANCELLED"
+  "CANCELLED",
 ]);
 
 export const createOrderSchema = z.object({

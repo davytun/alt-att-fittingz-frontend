@@ -1,7 +1,11 @@
+import { Edit } from "lucide-react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useClient } from "@/hooks/api";
 
 interface PersonalInfoCardProps {
   client: {
+    id: string;
     name: string;
     email: string;
     phone: string;
@@ -13,9 +17,17 @@ export function PersonalInfoCard({ client }: PersonalInfoCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">
-          Personal Information
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg font-semibold">
+            Personal Information
+          </CardTitle>
+          <Link
+            href={`/clients/edit-client/${client.id}`}
+            className="h-5 w-5 cursor-pointer hover:text-[#222831]"
+          >
+            <Edit />
+          </Link>
+        </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

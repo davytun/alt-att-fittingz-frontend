@@ -2,22 +2,28 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { stylesApi } from "@/lib/api/styles";
 import { showToast } from "@/lib/toast";
 import type {
-  UploadStyleImagesRequest,
+  DeleteMultipleImagesRequest,
   UpdateStyleImageRequest,
-  DeleteMultipleImagesRequest
+  UploadStyleImagesRequest,
 } from "@/types/style";
 
 // Query keys
 export const styleKeys = {
   all: ["styles"] as const,
-  clientImages: (clientId: string) => [...styleKeys.all, "client", clientId] as const,
+  clientImages: (clientId: string) =>
+    [...styleKeys.all, "client", clientId] as const,
   adminImages: () => [...styleKeys.all, "admin"] as const,
-  image: (clientId: string, imageId: string) => [...styleKeys.all, clientId, imageId] as const,
+  image: (clientId: string, imageId: string) =>
+    [...styleKeys.all, clientId, imageId] as const,
   count: () => [...styleKeys.all, "count"] as const,
 };
 
 // Get client style images
-export const useClientStyleImages = (clientId: string, page = 1, pageSize = 10) => {
+export const useClientStyleImages = (
+  clientId: string,
+  page = 1,
+  pageSize = 10,
+) => {
   return useQuery({
     queryKey: [...styleKeys.clientImages(clientId), page, pageSize],
     queryFn: () => stylesApi.getClientImages(clientId, page, pageSize),
@@ -55,10 +61,17 @@ export const useUploadClientImages = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ clientId, data }: { clientId: string; data: UploadStyleImagesRequest }) =>
-      stylesApi.uploadClientImages(clientId, data),
+    mutationFn: ({
+      clientId,
+      data,
+    }: {
+      clientId: string;
+      data: UploadStyleImagesRequest;
+    }) => stylesApi.uploadClientImages(clientId, data),
     onSuccess: (_, { clientId }) => {
-      queryClient.invalidateQueries({ queryKey: styleKeys.clientImages(clientId) });
+      queryClient.invalidateQueries({
+        queryKey: styleKeys.clientImages(clientId),
+      });
       queryClient.invalidateQueries({ queryKey: styleKeys.adminImages() });
       queryClient.invalidateQueries({ queryKey: styleKeys.count() });
       showToast.success("Images uploaded successfully");
@@ -74,7 +87,8 @@ export const useUploadAdminImages = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UploadStyleImagesRequest) => stylesApi.uploadAdminImages(data),
+    mutationFn: (data: UploadStyleImagesRequest) =>
+      stylesApi.uploadAdminImages(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: styleKeys.adminImages() });
       queryClient.invalidateQueries({ queryKey: styleKeys.count() });
@@ -91,14 +105,22 @@ export const useUpdateStyleImage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ clientId, imageId, data }: {
+    mutationFn: ({
+      clientId,
+      imageId,
+      data,
+    }: {
       clientId: string;
       imageId: string;
-      data: UpdateStyleImageRequest
+      data: UpdateStyleImageRequest;
     }) => stylesApi.updateStyleImage(clientId, imageId, data),
     onSuccess: (_, { clientId, imageId }) => {
-      queryClient.invalidateQueries({ queryKey: styleKeys.image(clientId, imageId) });
-      queryClient.invalidateQueries({ queryKey: styleKeys.clientImages(clientId) });
+      queryClient.invalidateQueries({
+        queryKey: styleKeys.image(clientId, imageId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: styleKeys.clientImages(clientId),
+      });
       queryClient.invalidateQueries({ queryKey: styleKeys.adminImages() });
       showToast.success("Image updated successfully");
     },
@@ -113,10 +135,17 @@ export const useDeleteStyleImage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ clientId, imageId }: { clientId: string; imageId: string }) =>
-      stylesApi.deleteStyleImage(clientId, imageId),
+    mutationFn: ({
+      clientId,
+      imageId,
+    }: {
+      clientId: string;
+      imageId: string;
+    }) => stylesApi.deleteStyleImage(clientId, imageId),
     onSuccess: (_, { clientId }) => {
-      queryClient.invalidateQueries({ queryKey: styleKeys.clientImages(clientId) });
+      queryClient.invalidateQueries({
+        queryKey: styleKeys.clientImages(clientId),
+      });
       queryClient.invalidateQueries({ queryKey: styleKeys.adminImages() });
       queryClient.invalidateQueries({ queryKey: styleKeys.count() });
       showToast.success("Image deleted successfully");
@@ -132,13 +161,16 @@ export const useDeleteMultipleImages = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: DeleteMultipleImagesRequest) => stylesApi.deleteMultipleImages(data),
+    mutationFn: (data: DeleteMultipleImagesRequest) =>
+      stylesApi.deleteMultipleImages(data),
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: styleKeys.adminImages() });
       queryClient.invalidateQueries({ queryKey: styleKeys.count() });
 
       if (result.failedCount > 0) {
-        showToast.warning(`${result.deletedCount} images deleted, ${result.failedCount} failed`);
+        showToast.warning(
+          `${result.deletedCount} images deleted, ${result.failedCount} failed`,
+        );
       } else {
         showToast.success(`${result.deletedCount} images deleted successfully`);
       }

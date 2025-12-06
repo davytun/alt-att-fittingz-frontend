@@ -1,15 +1,15 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft, CheckCircle2, Loader2, Pencil } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useProfile, useUpdateProfile } from "@/hooks/api/use-profile";
-import { Loader2, Pencil, ArrowLeft, CheckCircle2 } from "lucide-react";
 import {
-  updateProfileSchema,
   type UpdateProfileFormData,
+  updateProfileSchema,
 } from "@/lib/auth-schemas";
 
 export function ProfileForm() {
@@ -113,11 +113,10 @@ export function ProfileForm() {
                     alt="Profile"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     onError={(e) => {
-                      (
-                        e.target as HTMLImageElement
-                      ).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        profile?.businessName || "User"
-                      )}&background=0F4C75&color=fff&size=200`;
+                      (e.target as HTMLImageElement).src =
+                        `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          profile?.businessName || "User",
+                        )}&background=0F4C75&color=fff&size=200`;
                     }}
                   />
                 </div>

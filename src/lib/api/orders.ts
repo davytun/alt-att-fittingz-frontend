@@ -1,11 +1,11 @@
-import { apiClient } from "./client";
-import type { 
-  Order, 
-  OrdersResponse, 
-  CreateOrderRequest, 
+import type {
+  CreateOrderRequest,
+  Order,
+  OrdersResponse,
   UpdateOrderRequest,
-  UpdateOrderStatusRequest 
+  UpdateOrderStatusRequest,
 } from "@/types/order";
+import { apiClient } from "./client";
 
 export const ordersApi = {
   // Create order for client
@@ -16,14 +16,22 @@ export const ordersApi = {
     }),
 
   // Create order for event and client
-  createOrderForEvent: (clientId: string, eventId: string, data: CreateOrderRequest): Promise<Order> =>
+  createOrderForEvent: (
+    clientId: string,
+    eventId: string,
+    data: CreateOrderRequest,
+  ): Promise<Order> =>
     apiClient(`/clients/${clientId}/orders/event/${eventId}`, {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   // Get orders for client
-  getClientOrders: (clientId: string, page = 1, pageSize = 10): Promise<OrdersResponse> =>
+  getClientOrders: (
+    clientId: string,
+    page = 1,
+    pageSize = 10,
+  ): Promise<OrdersResponse> =>
     apiClient(`/clients/${clientId}/orders?page=${page}&pageSize=${pageSize}`),
 
   // Get all orders for admin
@@ -35,14 +43,22 @@ export const ordersApi = {
     apiClient(`/clients/${clientId}/orders/${orderId}?include=measurement`),
 
   // Update order
-  updateOrder: (clientId: string, orderId: string, data: UpdateOrderRequest): Promise<Order> =>
+  updateOrder: (
+    clientId: string,
+    orderId: string,
+    data: UpdateOrderRequest,
+  ): Promise<Order> =>
     apiClient(`/clients/${clientId}/orders/${orderId}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
 
   // Update order status
-  updateOrderStatus: (clientId: string, orderId: string, data: UpdateOrderStatusRequest): Promise<Order> =>
+  updateOrderStatus: (
+    clientId: string,
+    orderId: string,
+    data: UpdateOrderStatusRequest,
+  ): Promise<Order> =>
     apiClient(`/clients/${clientId}/orders/${orderId}/status`, {
       method: "PATCH",
       body: JSON.stringify(data),

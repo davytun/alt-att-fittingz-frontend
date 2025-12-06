@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight2, Notification, User } from "iconsax-react";
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -11,10 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAuth } from "@/hooks/use-auth";
 import { useClientList } from "@/hooks/api/use-clients";
+import { useAuth } from "@/hooks/use-auth";
 import { DashboardSkeleton } from "./dashboard-skeleton";
-import { Plus } from "lucide-react";
 
 export function DashboardContent() {
   const { admin } = useAuth();
@@ -47,11 +47,11 @@ export function DashboardContent() {
   const totalClients = data?.pagination.total ?? clients.length;
   const _totalMeasurements = clients.reduce(
     (acc, client) => acc + client._count.measurements,
-    0
+    0,
   );
   const totalStyles = clients.reduce(
     (acc, client) => acc + client._count.styleImages,
-    0
+    0,
   );
 
   const thirtyDaysAgo = new Date();
@@ -64,7 +64,7 @@ export function DashboardContent() {
   const recentClients = [...clients]
     .sort(
       (a, b) =>
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     )
     .slice(0, 4);
 

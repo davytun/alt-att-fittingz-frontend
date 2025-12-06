@@ -1,16 +1,16 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import {
   ChevronLeft,
   ChevronRight,
+  FileText,
+  Lock,
   LogOut,
   Pencil,
-  Lock,
   Shield,
-  FileText,
 } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/api/use-auth";
 import { useAuthContext } from "@/lib/auth-provider";
@@ -23,19 +23,19 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-        <div className="max-w-4xl mx-auto flex items-center px-4 md:px-6 py-4 md:py-5">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 group md:hidden"
-          >
-            <ChevronLeft className="w-5 h-5 text-gray-700 group-hover:text-[#0F4C75] transition-colors" />
-          </button>
-          <h1 className="flex-1 text-xl md:text-2xl font-bold text-center md:text-left ml-3 md:ml-0 text-gray-900">
-            Settings
-          </h1>
-          <div className="w-[50px] md:hidden"></div>
-        </div>
+      <div className="max-w-4xl mx-auto flex items-center px-4 md:px-6 py-4 md:py-5">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 group md:hidden"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-700 group-hover:text-[#0F4C75] transition-colors" />
+        </button>
+        <h1 className="flex-1 text-xl md:text-2xl font-bold text-center md:text-left ml-3 md:ml-0 text-gray-900">
+          Settings
+        </h1>
+        <div className="w-[50px] md:hidden"></div>
+      </div>
 
       <div className="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12">
         {/* Profile Card */}
@@ -50,7 +50,7 @@ export default function SettingsPage() {
                 <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300 border-4 border-white shadow-lg ring-4 ring-gray-100 group-hover:ring-[#0F4C75]/20 transition-all duration-300">
                   <Image
                     src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                      admin?.businessName || "User"
+                      admin?.businessName || "User",
                     )}&background=0F4C75&color=fff&size=200`}
                     alt={admin?.businessName || "User"}
                     width={112}

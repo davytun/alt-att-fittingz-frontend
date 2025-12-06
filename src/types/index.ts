@@ -1,23 +1,25 @@
+// Export ApiError from auth only to avoid conflicts
 export type {
   Admin,
+  ApiError,
+  AuthError,
   AuthResponse,
-  MessageResponse,
-  VerifyResetCodeResponse,
-  RegisterRequest,
-  LoginRequest,
-  VerifyEmailRequest,
-  ResendVerificationRequest,
   AuthState,
   ForgotPasswordRequest,
-  VerifyResetCodeRequest,
-  ResetPasswordRequest,
   ForgotPasswordResponse,
+  LoginRequest,
+  MessageResponse,
+  RegisterRequest,
+  ResendVerificationRequest,
+  ResetPasswordRequest,
   ResetPasswordResponse,
-  AuthError,
+  VerifyEmailRequest,
+  VerifyResetCodeRequest,
+  VerifyResetCodeResponse,
 } from "./auth";
-
 export type {
   Client,
+  ClientError,
   ClientResponse,
   ClientsResponse,
   CreateClientFormData,
@@ -25,8 +27,4 @@ export type {
   Measurement,
   StyleImage,
   UpdateClientFormData,
-  ClientError,
 } from "./client";
-
-// Export ApiError from auth only to avoid conflicts
-export type { ApiError } from "./auth";

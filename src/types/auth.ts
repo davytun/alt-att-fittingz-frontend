@@ -5,8 +5,8 @@ export type {
   Admin,
   AuthResponse,
   MessageResponse,
-  VerifyResetCodeResponse,
   UpdateProfileFormData,
+  VerifyResetCodeResponse,
 } from "@/lib/auth-schemas";
 
 export interface RegisterRequest {

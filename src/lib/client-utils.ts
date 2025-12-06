@@ -76,13 +76,7 @@ export const validateClientData = (data: Record<string, unknown>): string[] => {
 
 // Export utilities for CSV or other formats
 export const exportClientsToCSV = (clients: Client[]): string => {
-  const headers = [
-    "Name",
-    "Phone",
-    "Email",
-    "Gender",
-    "Created At",
-  ];
+  const headers = ["Name", "Phone", "Email", "Gender", "Created At"];
   const rows = clients.map((client) => [
     client.name,
     client.phone,

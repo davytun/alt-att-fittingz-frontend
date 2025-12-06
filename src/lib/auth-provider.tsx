@@ -36,7 +36,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       console.log("Auth state:", { isAuthenticated, pathname, isLoading });
-      console.log("LocalStorage auth-storage:", localStorage.getItem("auth-storage"));
+      console.log(
+        "LocalStorage auth-storage:",
+        localStorage.getItem("auth-storage"),
+      );
 
       // Define public routes (accessible without authentication)
       const publicRoutes = [

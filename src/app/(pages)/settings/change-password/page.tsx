@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { ArrowLeft, Eye, EyeOff, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Eye, EyeOff, ArrowLeft, Lock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 export default function ChangePasswordPage() {
   const router = useRouter();

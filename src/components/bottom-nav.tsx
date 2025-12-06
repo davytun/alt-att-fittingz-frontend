@@ -42,7 +42,7 @@ export function BottomNav() {
               href={item.url}
               key={item.title}
               className={cn(
-                "group inline-flex flex-col items-center justify-center px-5 rounded-lg mx-1 my-2"
+                "group inline-flex flex-col items-center justify-center px-5 rounded-lg mx-1 my-2",
               )}
             >
               <item.icon
@@ -55,7 +55,7 @@ export function BottomNav() {
                   "text-sm mt-1",
                   isActive
                     ? "text-[#0F4C75] font-bold"
-                    : "text-gray-500 group-hover:text-[#0F4C75] font-bold"
+                    : "text-gray-500 group-hover:text-[#0F4C75] font-bold",
                 )}
               >
                 {item.title}

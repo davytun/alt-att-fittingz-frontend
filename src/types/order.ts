@@ -76,7 +76,7 @@ export interface CreateOrderRequest {
   measurementId?: string;
 }
 
-export interface UpdateOrderRequest extends Partial<CreateOrderRequest> { }
+export interface UpdateOrderRequest extends Partial<CreateOrderRequest> {}
 
 export interface UpdateOrderStatusRequest {
   status: OrderStatus;

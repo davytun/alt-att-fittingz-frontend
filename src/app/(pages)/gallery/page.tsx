@@ -1,7 +1,7 @@
 "use client";
 
-import { GalleryGrid } from "./gallery-grid";
 import { useStyleImagesCount } from "@/hooks/api/use-styles";
+import { GalleryGrid } from "./gallery-grid";
 
 export default function GalleryPage() {
   const { data: countData } = useStyleImagesCount();

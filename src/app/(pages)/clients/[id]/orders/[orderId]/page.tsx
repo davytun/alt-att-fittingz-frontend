@@ -1,21 +1,20 @@
 "use client";
 
-import { use } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
   AlertCircle,
   ArrowLeft,
+  Banknote,
   Calendar,
   CheckCircle,
-  Banknote,
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -457,7 +456,7 @@ export default function OrderDetailPage({
                 // If not available, try to find it in the measurements list
                 if (!linkedMeasurement && order.measurementId) {
                   linkedMeasurement = measurements.find(
-                    (m) => m.id === order.measurementId
+                    (m) => m.id === order.measurementId,
                   );
                 }
 
@@ -627,8 +626,8 @@ export default function OrderDetailPage({
                   {(isEditing
                     ? totalPrice
                     : typeof order.price === "string"
-                    ? parseFloat(order.price)
-                    : order.price
+                      ? parseFloat(order.price)
+                      : order.price
                   ).toLocaleString()}
                 </p>
               </div>

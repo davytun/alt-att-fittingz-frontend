@@ -1,9 +1,9 @@
 "use client";
 
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Edit, Plus, Trash2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -109,7 +109,7 @@ export function StyleInspirationsCard({
     console.log(
       "Total size:",
       selectedImages.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024,
-      "MB"
+      "MB",
     );
 
     try {

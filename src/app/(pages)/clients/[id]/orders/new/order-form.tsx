@@ -75,8 +75,14 @@ const formSchema = z.object({
   dueDate: z.date(),
   note: z.string().optional(),
   measurementId: z.string().optional(),
-  deposit: z.number().min(0, "Deposit must be positive").max(999999999, "Deposit too large"),
-  price: z.number().min(0, "Total price must be positive").max(999999999, "Price too large"),
+  deposit: z
+    .number()
+    .min(0, "Deposit must be positive")
+    .max(999999999, "Deposit too large"),
+  price: z
+    .number()
+    .min(0, "Total price must be positive")
+    .max(999999999, "Price too large"),
   styleDescription: z.string().optional(),
   details: z.object({
     fabric: z.string(),
@@ -141,9 +147,9 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
       router.push(`/clients/${clientId}`);
     },
     onError: (error: any) => {
-      console.error('Order creation error:', error);
-      console.error('Error status:', error?.status);
-      console.error('Error details:', error);
+      console.error("Order creation error:", error);
+      console.error("Error status:", error?.status);
+      console.error("Error details:", error);
       // APIError from our client has the message from backend
       const errorMessage = error?.message || "Failed to create order";
       toast.error(`Validation Error: ${errorMessage}`);
@@ -162,12 +168,14 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
         const uploadedImages = await stylesApi.uploadClientImages(clientId, {
           images: styleImages,
           category: "order",
-          description: "Order style inspiration"
+          description: "Order style inspiration",
         });
-        styleImageIds = uploadedImages.map(img => img.id);
+        styleImageIds = uploadedImages.map((img) => img.id);
       } catch (error) {
         console.error("Image upload failed:", error);
-        toast.error("Failed to upload images. Order will be created without images.");
+        toast.error(
+          "Failed to upload images. Order will be created without images.",
+        );
       }
     }
 

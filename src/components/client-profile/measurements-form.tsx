@@ -2,7 +2,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useState, useId } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,7 +56,7 @@ export function MeasurementsForm({
   // Edit label
   const startEditing = (id: string) => {
     setCustomFields((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, isEditing: true } : f))
+      prev.map((f) => (f.id === id ? { ...f, isEditing: true } : f)),
     );
   };
 
@@ -64,8 +64,8 @@ export function MeasurementsForm({
     if (!newLabel.trim()) newLabel = "Unnamed Field";
     setCustomFields((prev) =>
       prev.map((f) =>
-        f.id === id ? { ...f, label: newLabel.trim(), isEditing: false } : f
-      )
+        f.id === id ? { ...f, label: newLabel.trim(), isEditing: false } : f,
+      ),
     );
   };
 

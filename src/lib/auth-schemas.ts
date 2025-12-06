@@ -90,7 +90,10 @@ export const adminSchema = z.object({
 
 export const updateProfileSchema = z.object({
   businessName: z.string().min(1, "Business name is required").optional(),
-  contactPhone: z.string().min(10, "Phone number must be at least 10 digits").optional(),
+  contactPhone: z
+    .string()
+    .min(10, "Phone number must be at least 10 digits")
+    .optional(),
   businessAddress: z.string().min(1, "Business address is required").optional(),
 });
 

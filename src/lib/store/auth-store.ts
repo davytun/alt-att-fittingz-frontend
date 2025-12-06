@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { Admin, AuthState } from "@/types/auth";
 import { tokenManager } from "@/lib/token-manager";
+import type { Admin, AuthState } from "@/types/auth";
 
 interface AuthStore extends AuthState {
   setAuth: (admin: Admin, token: string) => void;
@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthStore>()(
           isAuthenticated: !!(admin && token),
           isLoading: false,
         });
-        
+
         // Start auto-refresh when authenticated
         if (admin && token) {
           tokenManager.startAutoRefresh();
@@ -94,8 +94,12 @@ export const useAuthStore = create<AuthStore>()(
         // Validate auth state on rehydration
         if (state) {
           const hasValidAuth = !!(state.admin && state.token);
-          console.log("Rehydrating auth:", { hasValidAuth, admin: !!state.admin, token: !!state.token });
-          
+          console.log("Rehydrating auth:", {
+            hasValidAuth,
+            admin: !!state.admin,
+            token: !!state.token,
+          });
+
           if (!hasValidAuth) {
             state.clearAuth();
           } else {
@@ -103,10 +107,18 @@ export const useAuthStore = create<AuthStore>()(
             // Start auto-refresh on rehydration if authenticated
             tokenManager.startAutoRefresh();
           }
-          
+
           state.hydrate();
         }
       },
     },
   ),
 );
+
+// Initialize token manager after store is created
+if (typeof window !== "undefined") {
+  // Use setTimeout to ensure store is fully initialized
+  setTimeout(() => {
+    tokenManager.init();
+  }, 0);
+}

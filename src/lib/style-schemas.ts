@@ -17,4 +17,6 @@ export const deleteMultipleImagesSchema = z.object({
 
 export type UploadStyleImagesFormData = z.infer<typeof uploadStyleImagesSchema>;
 export type UpdateStyleImageFormData = z.infer<typeof updateStyleImageSchema>;
-export type DeleteMultipleImagesFormData = z.infer<typeof deleteMultipleImagesSchema>;
+export type DeleteMultipleImagesFormData = z.infer<
+  typeof deleteMultipleImagesSchema
+>;

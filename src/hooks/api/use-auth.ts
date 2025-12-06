@@ -130,7 +130,8 @@ export function useForgotPassword() {
       }),
     onSuccess: (data) => {
       toast.success("Reset Code Sent", {
-        description: data.message || "Password reset code has been sent to your email.",
+        description:
+          data.message || "Password reset code has been sent to your email.",
       });
     },
     onError: () => {
@@ -172,7 +173,9 @@ export function useResetPassword() {
       }),
     onSuccess: (data) => {
       toast.success("Password Reset", {
-        description: data.message || "Password reset successful. You can now log in with your new password.",
+        description:
+          data.message ||
+          "Password reset successful. You can now log in with your new password.",
       });
       router.push("/login");
     },

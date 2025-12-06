@@ -1,8 +1,10 @@
 // components/app-sidebar.tsx
 "use client";
 
-import { Home2, People, Gallery, Setting2, LogoutCurve } from "iconsax-react";
-
+import { Gallery, Home2, LogoutCurve, People, Setting2 } from "iconsax-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -12,11 +14,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { useAuthContext } from "@/lib/auth-provider";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home2 },
@@ -65,7 +64,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     "w-full px-3 py-7 rounded-lg transition-all duration-200",
                     isActive
                       ? "bg-primary text-primary-foreground font-medium shadow-sm hover:bg-primary/95 hover:text-primary-foreground"
-                      : "hover:bg-accent hover:text-accent-foreground"
+                      : "hover:bg-accent hover:text-accent-foreground",
                   )}
                 >
                   <Link
@@ -80,13 +79,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       }
                       className={cn(
                         "transition-all duration-200",
-                        isActive && "text-primary-foreground"
+                        isActive && "text-primary-foreground",
                       )}
                     />
                     <span
                       className={cn(
                         "text-lg transition-all duration-200",
-                        isActive ? "text-white font-bold" : "text-[#222831]"
+                        isActive ? "text-white font-bold" : "text-[#222831]",
                       )}
                     >
                       {item.title}

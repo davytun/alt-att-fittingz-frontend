@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiClient, endpoints, type Admin } from "@/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { type Admin, apiClient, endpoints } from "@/api";
 
 export function useUser() {
   return useQuery({
@@ -10,7 +10,7 @@ export function useUser() {
 
 export function useUpdateUser() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (data: Partial<Admin>) =>
       apiClient<Admin>(endpoints.users.me, {

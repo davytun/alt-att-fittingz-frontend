@@ -1,10 +1,10 @@
 "use client";
 
-import { use } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Edit } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -78,7 +78,7 @@ export default function MeasurementDetailPage({
           <Button
             onClick={() =>
               router.push(
-                `/clients/${clientId}/measurements?edit=${measurementId}`
+                `/clients/${clientId}/measurements?edit=${measurementId}`,
               )
             }
           >

@@ -1,17 +1,20 @@
-import type { Metadata } from "next";
-import { Suspense } from "react";
-import { ClientsContent } from "@/components/clients-content";
-import { ClientsSkeleton } from "@/components/clients-skeleton";
+// app/(app)/clients/page.tsx
 
-export const metadata: Metadata = {
+import { ClientsListWrapper } from "@/components/clients/clients-list-wrapper";
+import { ClientsHeader } from "@/components/clients/header";
+import { ClientsSearchBar } from "@/components/clients/search-bar";
+
+export const metadata = {
   title: "Clients - Fittingz",
   description: "Manage your clients and their measurements",
 };
 
 export default function ClientsPage() {
   return (
-    <Suspense fallback={<ClientsSkeleton />}>
-      <ClientsContent />
-    </Suspense>
+    <div className="space-y-8">
+      <ClientsHeader />
+      <ClientsSearchBar />
+      <ClientsListWrapper />
+    </div>
   );
 }

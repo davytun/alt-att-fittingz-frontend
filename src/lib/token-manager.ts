@@ -1,19 +1,23 @@
-import { useAuthStore } from "@/lib/store/auth-store";
 import { API_CONFIG } from "@/lib/config";
+import { useAuthStore } from "@/lib/store/auth-store";
 import { showToast } from "@/lib/toast";
 
 class TokenManager {
   private refreshTimer: NodeJS.Timeout | null = null;
   private isRefreshing = false;
+  private failedRequests: Array<{
+    resolve: () => void;
+    reject: (err: any) => void;
+  }> = [];
 
-  // Refresh token every 6 days (before 7-day expiry)
-  private readonly REFRESH_INTERVAL = 6 * 24 * 60 * 60 * 1000;
+  private readonly REFRESH_INTERVAL = 6 * 24 * 60 * 60 * 1000; // 6 days
 
   startAutoRefresh() {
     this.stopAutoRefresh();
-    this.refreshTimer = setInterval(() => {
-      this.refreshToken();
-    }, this.REFRESH_INTERVAL);
+    this.refreshTimer = setInterval(
+      () => this.refreshToken(),
+      this.REFRESH_INTERVAL,
+    );
   }
 
   stopAutoRefresh() {
@@ -23,33 +27,35 @@ class TokenManager {
     }
   }
 
-  async refreshToken(): Promise<boolean> {
+  // Make it public so apiClient can call it
+  public async refreshToken(): Promise<boolean> {
     if (this.isRefreshing) return false;
-    
     this.isRefreshing = true;
-    
+
     try {
       const response = await fetch(`${API_CONFIG.API_URL}/auth/refresh`, {
-        method: 'POST',
-        credentials: 'include'
+        method: "POST",
+        credentials: "include",
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.token) {
-          const { setAuth, admin } = useAuthStore.getState();
-          setAuth(admin || data.admin, data.token);
-          return true;
-        }
-      }
-      
-      // Refresh failed - logout user
-      useAuthStore.getState().clearAuth();
-      showToast.error("Session expired. Please log in again.");
-      return false;
+      if (!response.ok) throw new Error("Refresh failed");
+
+      const data = await response.json();
+      if (!data.token) throw new Error("No token returned");
+
+      const { setAuth } = useAuthStore.getState();
+      setAuth(data.admin || null, data.token);
+
+      // Success – resolve all queued requests
+      this.failedRequests.forEach(({ resolve }) => resolve());
+      this.failedRequests = [];
+
+      return true;
     } catch (error) {
-      console.error('Token refresh failed:', error);
-      useAuthStore.getState().clearAuth();
+      console.error("Token refresh failed:", error);
+      this.failedRequests.forEach(({ reject }) => reject(error));
+      this.failedRequests = [];
+      this.logout();
       showToast.error("Session expired. Please log in again.");
       return false;
     } finally {
@@ -57,14 +63,33 @@ class TokenManager {
     }
   }
 
-  async handleApiError(response: Response, retryFn: () => Promise<Response>): Promise<Response> {
-    if (response.status === 401 && !this.isRefreshing) {
-      const refreshed = await this.refreshToken();
-      if (refreshed) {
-        return retryFn();
-      }
+  public async handleApiError(
+    response: Response,
+    retryFn: () => Promise<Response>,
+  ): Promise<Response> {
+    if (response.status !== 401) return response;
+
+    // Wait for ongoing refresh
+    if (this.isRefreshing) {
+      await new Promise<void>((resolve, reject) => {
+        this.failedRequests.push({ resolve, reject });
+      });
     }
-    return response;
+
+    const refreshed = await this.refreshToken();
+    return refreshed ? retryFn() : response;
+  }
+
+  public logout() {
+    this.stopAutoRefresh();
+    useAuthStore.getState().clearAuth();
+    window.location.href = "/login";
+  }
+
+  public init() {
+    if (useAuthStore.getState().token) {
+      this.startAutoRefresh();
+    }
   }
 }
 

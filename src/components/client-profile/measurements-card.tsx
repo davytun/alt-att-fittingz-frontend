@@ -17,6 +17,10 @@ export function MeasurementsCard({ clientId }: MeasurementsCardProps) {
   });
 
   const handleAddMeasurement = () => {
+    router.push(`/clients/${clientId}/measurements/new`);
+  };
+
+  const handleViewAll = () => {
     router.push(`/clients/${clientId}/measurements`);
   };
 
@@ -28,7 +32,11 @@ export function MeasurementsCard({ clientId }: MeasurementsCardProps) {
     <Card className="bg-[#F7F9FC]">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-semibold">Measurements</CardTitle>
-        <Button variant="link" className="text-[#0F4C75] font-bold p-0">
+        <Button
+          variant="link"
+          className="text-[#0F4C75] font-bold p-0 hover:text-[#0F4C75]/90 transition-all duration-300 ease-in-out cursor-pointer"
+          onClick={handleViewAll}
+        >
           View All
         </Button>
       </CardHeader>
@@ -46,7 +54,7 @@ export function MeasurementsCard({ clientId }: MeasurementsCardProps) {
                 .sort(
                   (a, b) =>
                     new Date(b.updatedAt).getTime() -
-                    new Date(a.updatedAt).getTime()
+                    new Date(a.updatedAt).getTime(),
                 )
                 .slice(0, 2);
 

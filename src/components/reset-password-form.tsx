@@ -117,7 +117,6 @@ export function ResetPasswordForm() {
               placeholder="Enter your new password"
               autoComplete="new-password"
               {...register("newPassword")}
-
             />
             <p className="text-xs text-gray-500">
               Must be at least 8 characters with uppercase, lowercase, number,
@@ -133,7 +132,6 @@ export function ResetPasswordForm() {
               placeholder="Confirm your new password"
               autoComplete="new-password"
               {...register("confirmPassword")}
-
             />
           </div>
 

@@ -1,18 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ordersApi } from "@/lib/api/orders";
 import { showToast } from "@/lib/toast";
-import type { 
-  CreateOrderRequest, 
-  UpdateOrderRequest, 
-  UpdateOrderStatusRequest 
+import type {
+  CreateOrderRequest,
+  UpdateOrderRequest,
+  UpdateOrderStatusRequest,
 } from "@/types/order";
 
 // Query keys
 export const orderKeys = {
   all: ["orders"] as const,
-  clientOrders: (clientId: string) => [...orderKeys.all, "client", clientId] as const,
+  clientOrders: (clientId: string) =>
+    [...orderKeys.all, "client", clientId] as const,
   adminOrders: () => [...orderKeys.all, "admin"] as const,
-  order: (clientId: string, orderId: string) => [...orderKeys.all, clientId, orderId] as const,
+  order: (clientId: string, orderId: string) =>
+    [...orderKeys.all, clientId, orderId] as const,
 };
 
 // Get client orders
@@ -46,10 +48,17 @@ export const useCreateOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ clientId, data }: { clientId: string; data: CreateOrderRequest }) =>
-      ordersApi.createOrder(clientId, data),
+    mutationFn: ({
+      clientId,
+      data,
+    }: {
+      clientId: string;
+      data: CreateOrderRequest;
+    }) => ordersApi.createOrder(clientId, data),
     onSuccess: (_, { clientId }) => {
-      queryClient.invalidateQueries({ queryKey: orderKeys.clientOrders(clientId) });
+      queryClient.invalidateQueries({
+        queryKey: orderKeys.clientOrders(clientId),
+      });
       queryClient.invalidateQueries({ queryKey: orderKeys.adminOrders() });
       showToast.success("Order created successfully");
     },
@@ -64,13 +73,19 @@ export const useCreateOrderForEvent = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ clientId, eventId, data }: { 
-      clientId: string; 
-      eventId: string; 
-      data: CreateOrderRequest 
+    mutationFn: ({
+      clientId,
+      eventId,
+      data,
+    }: {
+      clientId: string;
+      eventId: string;
+      data: CreateOrderRequest;
     }) => ordersApi.createOrderForEvent(clientId, eventId, data),
     onSuccess: (_, { clientId }) => {
-      queryClient.invalidateQueries({ queryKey: orderKeys.clientOrders(clientId) });
+      queryClient.invalidateQueries({
+        queryKey: orderKeys.clientOrders(clientId),
+      });
       queryClient.invalidateQueries({ queryKey: orderKeys.adminOrders() });
       showToast.success("Order created successfully");
     },
@@ -85,14 +100,22 @@ export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ clientId, orderId, data }: { 
-      clientId: string; 
-      orderId: string; 
-      data: UpdateOrderRequest 
+    mutationFn: ({
+      clientId,
+      orderId,
+      data,
+    }: {
+      clientId: string;
+      orderId: string;
+      data: UpdateOrderRequest;
     }) => ordersApi.updateOrder(clientId, orderId, data),
     onSuccess: (_, { clientId, orderId }) => {
-      queryClient.invalidateQueries({ queryKey: orderKeys.order(clientId, orderId) });
-      queryClient.invalidateQueries({ queryKey: orderKeys.clientOrders(clientId) });
+      queryClient.invalidateQueries({
+        queryKey: orderKeys.order(clientId, orderId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: orderKeys.clientOrders(clientId),
+      });
       queryClient.invalidateQueries({ queryKey: orderKeys.adminOrders() });
       showToast.success("Order updated successfully");
     },
@@ -107,14 +130,22 @@ export const useUpdateOrderStatus = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ clientId, orderId, data }: { 
-      clientId: string; 
-      orderId: string; 
-      data: UpdateOrderStatusRequest 
+    mutationFn: ({
+      clientId,
+      orderId,
+      data,
+    }: {
+      clientId: string;
+      orderId: string;
+      data: UpdateOrderStatusRequest;
     }) => ordersApi.updateOrderStatus(clientId, orderId, data),
     onSuccess: (_, { clientId, orderId }) => {
-      queryClient.invalidateQueries({ queryKey: orderKeys.order(clientId, orderId) });
-      queryClient.invalidateQueries({ queryKey: orderKeys.clientOrders(clientId) });
+      queryClient.invalidateQueries({
+        queryKey: orderKeys.order(clientId, orderId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: orderKeys.clientOrders(clientId),
+      });
       queryClient.invalidateQueries({ queryKey: orderKeys.adminOrders() });
       showToast.success("Order status updated");
     },
@@ -129,10 +160,17 @@ export const useDeleteOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ clientId, orderId }: { clientId: string; orderId: string }) =>
-      ordersApi.deleteOrder(clientId, orderId),
+    mutationFn: ({
+      clientId,
+      orderId,
+    }: {
+      clientId: string;
+      orderId: string;
+    }) => ordersApi.deleteOrder(clientId, orderId),
     onSuccess: (_, { clientId }) => {
-      queryClient.invalidateQueries({ queryKey: orderKeys.clientOrders(clientId) });
+      queryClient.invalidateQueries({
+        queryKey: orderKeys.clientOrders(clientId),
+      });
       queryClient.invalidateQueries({ queryKey: orderKeys.adminOrders() });
       showToast.success("Order deleted successfully");
     },

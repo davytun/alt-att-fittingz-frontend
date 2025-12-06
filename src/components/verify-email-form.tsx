@@ -17,12 +17,7 @@ interface VerifyEmailFormProps {
 }
 
 export function VerifyEmailForm({ email }: VerifyEmailFormProps) {
-  const [verificationCode, setVerificationCode] = useState([
-    "",
-    "",
-    "",
-    "",
-  ]);
+  const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const {

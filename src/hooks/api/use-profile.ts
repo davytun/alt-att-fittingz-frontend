@@ -14,8 +14,9 @@ export function useUpdateProfile() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: Partial<UpdateProfileFormData> & { profileImage?: File }) =>
-      profileApi.updateProfile(data),
+    mutationFn: (
+      data: Partial<UpdateProfileFormData> & { profileImage?: File },
+    ) => profileApi.updateProfile(data),
     onSuccess: (updatedProfile: Admin) => {
       queryClient.setQueryData(["profile"], updatedProfile);
       showToast.success("Profile updated successfully");

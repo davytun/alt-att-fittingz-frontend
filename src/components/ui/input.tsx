@@ -26,13 +26,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           // Error state
           "data-[invalid=true]:border-red-500 data-[invalid=true]:shadow-[0_0_0_3px_rgba(239,68,68,0.15)]",
 
-          className
+          className,
         )}
         ref={ref}
         {...props}
       />
     );
-  }
+  },
 );
 
 Input.displayName = "Input";
