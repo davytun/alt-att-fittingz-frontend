@@ -32,7 +32,7 @@ export function DashboardHeader() {
         <div className="flex flex-wrap gap-3">
           <Button
             variant={"secondary"}
-            className=""
+            className="text-[#0F4C75] transition-colors hover:bg-[#0F4C75] hover:border hover:border-white hover:text-white"
             onClick={() => router.push("/clients/new")}
           >
             <Plus className="mr-2 h-5 w-5" />
@@ -40,7 +40,7 @@ export function DashboardHeader() {
           </Button>
           <Button
             variant={"secondary"}
-            className=""
+            className="text-[#0F4C75] transition-colors hover:bg-[#0F4C75] hover:border hover:border-white hover:text-white"
             onClick={() =>
               toast.info("Coming soon", {
                 description: "Order management is under development.",

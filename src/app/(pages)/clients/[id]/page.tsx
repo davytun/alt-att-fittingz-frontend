@@ -106,7 +106,7 @@ export default function ClientProfilePage({
         </div>
         <div className="pointer-events-none absolute -right-16 -bottom-20 h-56 w-56 rounded-full bg-white/10 md:-right-6 md:-bottom-16" />
       </section>
-      <div className="p-4 md:p-6 space-y-8">
+      <div className="p-4 md:p-6 space-y-8 mb-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">

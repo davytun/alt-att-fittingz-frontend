@@ -181,6 +181,7 @@ export function MeasurementsForm({
 
       {/* Add Button */}
       <Button
+        type="button"
         variant="outline"
         onClick={addCustomField}
         className="w-full h-11 border-dashed border-[#222831]/30 hover:border-[#0F4C75] hover:text-[#0F4C75]"
@@ -192,6 +193,7 @@ export function MeasurementsForm({
       {/* Save/Cancel */}
       <div className="flex gap-4 pt-6">
         <Button
+          type="button"
           onClick={handleSave}
           disabled={isLoading || !measurementName.trim()}
           className="flex-1 h-11 bg-[#0F4C75] hover:bg-[#0F4C75]/90 text-white font-bold"
@@ -199,6 +201,7 @@ export function MeasurementsForm({
           {isLoading ? "Saving..." : "Save Measurement"}
         </Button>
         <Button
+          type="button"
           variant="outline"
           onClick={onCancel}
           className="flex-1 h-11 border-red-300 text-red-600 hover:bg-red-50 font-bold"

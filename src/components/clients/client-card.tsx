@@ -36,24 +36,25 @@ export function ClientCard({ client }: { client: Client }) {
     >
       <div className="absolute inset-0 bg-linear-to-br from-[#0F4C75]/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
       <div className="relative flex flex-col gap-5">
-        <div className="flex items-center gap-4">
-          <Avatar className="h-14 w-14 ring-4 ring-white shadow-md">
-            <AvatarFallback className="bg-linear-to-br from-[#0F4C75] to-[#1e90ff] text-white text-xl font-bold">
-              {client.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")
-                .toUpperCase()
-                .slice(0, 2)}
-            </AvatarFallback>
-          </Avatar>
+        <div className="flex items-start gap-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <Avatar className="h-14 w-14 ring-4 ring-white shadow-md">
+                <AvatarFallback className="bg-linear-to-br from-[#0F4C75] to-[#1e90ff] text-white text-xl font-bold">
+                  {client.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()
+                    .slice(0, 2)}
+                </AvatarFallback>
+              </Avatar>
+              <h3 className="text-xl font-bold text-[#222831] tracking-tight">
+                {client.name}
+              </h3>
+            </div>
 
-          <div>
-            <h3 className="text-xl font-bold text-[#222831] tracking-tight">
-              {client.name}
-            </h3>
-
-            <div className="mt-2 space-y-2">
+            <div className="space-y-2">
               {client.phone && (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Phone className="h-4 w-4 text-[#0F4C75]" />
@@ -86,7 +87,7 @@ export function ClientCard({ client }: { client: Client }) {
 
         <Button
           size="lg"
-          className="mt-4 w-full bg-[#0F4C75] font-bold text-white shadow-md transition-all hover:bg-[#0F4C75]/90 hover:shadow-lg cursor-pointer md:mt-0 md:w-auto group-hover:translate-x-1"
+          className="mt-4 w-full bg-[#0F4C75] hover:bg-[#0F4C75]/70 font-bold text-white shadow-md transition-all hover:bg-[#0F4C75]/90 hover:shadow-lg cursor-pointer md:mt-0 md:w-auto group-hover:translate-x-1"
           onClick={() => router.push(`/clients/${client.id}`)}
         >
           View Profile

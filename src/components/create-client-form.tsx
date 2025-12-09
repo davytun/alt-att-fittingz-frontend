@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -51,10 +50,8 @@ export function CreateClientForm() {
   const onSubmit = async (data: CreateClientFormData) => {
     try {
       await createMutation.mutateAsync(data);
-      toast.success("Client created successfully!");
       router.push("/clients");
     } catch (error) {
-      toast.error("Failed to create client. Please try again.");
       console.error(error);
     }
   };
@@ -64,7 +61,7 @@ export function CreateClientForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="mx-auto w-full max-w-4xl space-y-8 px-4 md:px-0"
     >
-      <Card className="rounded-3xl border border-[#E4ECFA] bg-white">
+      <Card className="shadow-lg">
         <CardHeader className="px-6 pt-8 pb-0 text-center md:px-12">
           <CardTitle className="text-xl font-semibold text-[#0F4C75] md:text-2xl">
             Client Information
