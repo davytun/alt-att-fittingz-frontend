@@ -9,7 +9,11 @@ interface ClientWrapperProps {
 
 export function ClientWrapper({ children }: ClientWrapperProps) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={
+      <div className="flex h-screen items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0F4C75]" />
+      </div>
+    }>
       <Providers>{children}</Providers>
     </Suspense>
   );
