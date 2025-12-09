@@ -21,12 +21,10 @@ export default function MeasurementDetailPage({
   const router = useRouter();
 
   // Fetch measurement data
-  const { data: measurements, isLoading } = useQuery({
-    queryKey: ["measurements", clientId],
-    queryFn: () => measurementsApi.getMeasurements(clientId),
+  const { data: measurement, isLoading } = useQuery({
+    queryKey: ["measurement", measurementId],
+    queryFn: () => measurementsApi.getMeasurement(measurementId),
   });
-
-  const measurement = measurements?.find((m) => m.id === measurementId);
 
   if (isLoading || !measurement) {
     return (
@@ -39,57 +37,79 @@ export default function MeasurementDetailPage({
   const fields = measurement.fields as Record<string, unknown>;
   const fieldEntries = Object.entries(fields);
 
-  // Helper to format field names (camelCase to Title Case)
+  // Helper to format field names
   const formatFieldName = (key: string) => {
     return key
-      .replace(/([A-Z])/g, " $1")
+      .replace(/_/g, ' ')
+      .replace(/([A-Z])/g, ' $1')
       .trim()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
+      .replace(/\s+/g, ' ');
   };
 
+  // Helper to format values with units
+  const formatValue = (value: unknown) => {
+    const strValue = String(value || '');
+    // If it's a number, assume it's in cm
+    if (!isNaN(Number(strValue)) && strValue.trim() !== '') {
+      return `${strValue} cm`;
+    }
+    return strValue;
+  };
+
+  // Capitalize name
+  const capitalizedName = measurement.name
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+
   return (
-    <div className="min-h-screen bg-[#F2F2F2] py-8">
+    <div className="min-h-screen bg-[#F2F2F2]">
       {/* Header */}
-      <div className="max-w-4xl mx-auto px-6 mb-8">
-        <Link
-          href={`/clients/${clientId}`}
-          className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Client Profile
-        </Link>
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              {measurement.name}
-              {measurement.isDefault && (
-                <span className="ml-3 text-sm font-normal text-blue-600 bg-blue-100 px-2 py-1 rounded">
-                  Default
-                </span>
-              )}
-            </h1>
-            <p className="text-gray-600 mt-1">
-              Last updated:{" "}
-              {new Date(measurement.updatedAt).toLocaleDateString()}
-            </p>
+      <section className="relative overflow-hidden rounded-b-[3rem] bg-[#0F4C75] px-6 py-12 text-white shadow-sm md:px-12">
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm uppercase tracking-[0.2em] text-white/80 mb-2">
+                Measurement Details
+              </p>
+              <h1 className="text-2xl font-bold md:text-3xl">
+                {capitalizedName}
+                {measurement.isDefault && (
+                  <span className="ml-3 text-sm font-normal text-blue-200 bg-blue-900/30 px-2 py-1 rounded">
+                    Default
+                  </span>
+                )}
+              </h1>
+              <p className="text-white/80 mt-2 text-sm">
+                {measurement.order?.orderNumber && (
+                  <span className="font-mono bg-white/10 px-2 py-1 rounded mr-2">
+                    {measurement.order.orderNumber}
+                  </span>
+                )}
+                Last updated: {new Date(measurement.updatedAt).toLocaleDateString()}
+              </p>
+            </div>
+            <Button
+              onClick={() =>
+                router.push(
+                  `/clients/${clientId}/measurements/new?edit=${measurementId}`,
+                )
+              }
+              className="bg-white text-[#0F4C75] hover:bg-white/90"
+            >
+              <Edit className="mr-2 h-4 w-4" />
+              Edit
+            </Button>
           </div>
-          <Button
-            onClick={() =>
-              router.push(
-                `/clients/${clientId}/measurements?edit=${measurementId}`,
-              )
-            }
-          >
-            <Edit className="mr-2 h-4 w-4" />
-            Edit
-          </Button>
         </div>
-      </div>
+        <div className="pointer-events-none absolute -right-16 -bottom-20 h-56 w-56 rounded-full bg-white/10 md:-right-6 md:-bottom-16" />
+      </section>
 
       {/* Measurement Details */}
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="container mx-auto px-4 py-8">
         <Card className="bg-white">
           <CardHeader>
             <CardTitle className="text-xl font-semibold">
@@ -103,18 +123,27 @@ export default function MeasurementDetailPage({
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {fieldEntries.map(([key, value]) => (
-                  <div key={key} className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-700">
-                      {formatFieldName(key)}
-                    </Label>
-                    <Input
-                      value={String(value || "")}
-                      disabled
-                      className="bg-gray-50 border-gray-200"
-                    />
-                  </div>
-                ))}
+                {fieldEntries.map(([key, value]) => {
+                  const strValue = String(value || '');
+                  const numValue = !isNaN(Number(strValue)) && strValue.trim() !== '' ? strValue : null;
+                  
+                  return (
+                    <div key={key} className="space-y-1">
+                      <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+                        {formatFieldName(key)}
+                      </Label>
+                      <p className="text-lg font-semibold text-gray-900">
+                        {numValue ? (
+                          <>
+                            {numValue} <span className="text-sm font-normal text-gray-500">cm</span>
+                          </>
+                        ) : (
+                          strValue
+                        )}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </CardContent>

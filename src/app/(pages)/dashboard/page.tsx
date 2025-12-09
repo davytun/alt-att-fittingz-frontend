@@ -1,9 +1,5 @@
 import { Suspense } from "react";
 import {
-  ActivitySummary,
-  ActivitySummarySkeleton,
-} from "@/components/dashboard/activity-summary";
-import {
   DashboardHeader,
   DashboardHeaderSkeleton,
 } from "@/components/dashboard/dashboard-header";
@@ -12,6 +8,10 @@ import {
   MetricsGridSkeleton,
 } from "@/components/dashboard/metrics-grid";
 import { RecentUpdatesFeed } from "@/components/dashboard/recent-updates-feed";
+import {
+  OrderStatusChart,
+  OrderStatusChartSkeleton,
+} from "@/components/dashboard/order-status-chart";
 
 export const metadata = {
   title: "Dashboard - Fittingz",
@@ -31,9 +31,8 @@ export default function DashboardPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <RecentUpdatesFeed />
-
-        <Suspense fallback={<ActivitySummarySkeleton />}>
-          <ActivitySummary />
+        <Suspense fallback={<OrderStatusChartSkeleton />}>
+          <OrderStatusChart />
         </Suspense>
       </div>
     </div>

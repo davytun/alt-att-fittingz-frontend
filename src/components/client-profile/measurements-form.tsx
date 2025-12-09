@@ -19,10 +19,13 @@ const defaultFields = [
   { label: "Length (inches)", key: "length" },
   { label: "Inseam (inches)", key: "inseam" },
 ];
+
+const defaultFieldKeys = defaultFields.map(f => f.key);
 export function MeasurementsForm({
   onSave,
   onCancel,
   isLoading,
+  initialData,
 }: {
   onSave: (data: {
     name: string;
@@ -30,14 +33,32 @@ export function MeasurementsForm({
   }) => void;
   onCancel: () => void;
   isLoading?: boolean;
+  initialData?: {
+    name: string;
+    measurements: Record<string, string>;
+  };
 }) {
-  const [measurementName, setMeasurementName] = useState("");
-  const [measurements, setMeasurements] = useState<Record<string, string>>({});
+  const [measurementName, setMeasurementName] = useState(initialData?.name || "");
+  const [measurements, setMeasurements] = useState<Record<string, string>>(initialData?.measurements || {});
 
   // Fixed custom fields state
   const [customFields, setCustomFields] = useState<
     Array<{ id: string; label: string; key: string; isEditing: boolean }>
-  >([]);
+  >(() => {
+    if (!initialData?.measurements) return [];
+    const customKeys = Object.keys(initialData.measurements).filter(key => 
+      !defaultFieldKeys.includes(key)
+    );
+    return customKeys.map(key => {
+      const labelFromKey = key.replace(/_/g, ' ');
+      return {
+        id: key,
+        key,
+        label: labelFromKey,
+        isEditing: false,
+      };
+    });
+  });
 
   const handleInputChange = (key: string, value: string) => {
     setMeasurements((prev) => ({ ...prev, [key]: value }));
@@ -46,10 +67,9 @@ export function MeasurementsForm({
   // PERFECT add custom field
   const addCustomField = () => {
     const id = Date.now().toString();
-    const key = `custom_${id}`;
     setCustomFields((prev) => [
       ...prev,
-      { id, key, label: "New Field", isEditing: true },
+      { id, key: "", label: "", isEditing: true },
     ]);
   };
 
@@ -61,12 +81,27 @@ export function MeasurementsForm({
   };
 
   const saveLabel = (id: string, newLabel: string) => {
-    if (!newLabel.trim()) newLabel = "Unnamed Field";
+    if (!newLabel.trim()) return;
+    const oldField = customFields.find(f => f.id === id);
+    const newKey = newLabel.trim().replace(/\s+/g, '_');
+    
     setCustomFields((prev) =>
       prev.map((f) =>
-        f.id === id ? { ...f, label: newLabel.trim(), isEditing: false } : f,
+        f.id === id ? { ...f, key: newKey, label: newLabel.trim(), isEditing: false } : f,
       ),
     );
+    
+    // Update measurements with new key
+    if (oldField && oldField.key && oldField.key !== newKey) {
+      setMeasurements((prev) => {
+        const newMeasurements = { ...prev };
+        if (oldField.key in newMeasurements) {
+          newMeasurements[newKey] = newMeasurements[oldField.key];
+          delete newMeasurements[oldField.key];
+        }
+        return newMeasurements;
+      });
+    }
   };
 
   const handleSave = () => {

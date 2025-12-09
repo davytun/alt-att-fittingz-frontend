@@ -26,8 +26,6 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     }
   }, [isAuthenticated, isLoading, router, pathname]);
 
-  // Show a loader while auth status is loading or while redirecting the user.
-  // This prevents a flash of the auth form when the user is already logged in.
   const isPasswordResetPage =
     pathname.includes("/forgot-password") ||
     pathname.includes("/verify-reset-code") ||

@@ -35,6 +35,9 @@ export const measurementsApi = {
   getMeasurements: (clientId: string): Promise<Measurement[]> =>
     apiClient<Measurement[]>(`/clients/${clientId}/measurements`),
 
+  getMeasurement: (measurementId: string): Promise<Measurement> =>
+    apiClient<Measurement>(`/clients/measurements/${measurementId}`),
+
   createMeasurement: (
     clientId: string,
     data: CreateMeasurementRequest,

@@ -63,10 +63,11 @@ export function MeasurementsCard({ clientId }: MeasurementsCardProps) {
                 : latestMeasurements;
 
               return displayMeasurements.map((measurement) => (
-                <div
+                <button
                   key={measurement.id}
+                  type="button"
                   onClick={() => handleViewMeasurement(measurement.id)}
-                  className="p-4 bg-white rounded-lg flex items-center border justify-between cursor-pointer hover:shadow-md transition-shadow"
+                  className="p-4 bg-white rounded-lg flex items-center border justify-between cursor-pointer hover:shadow-md transition-shadow w-full text-left"
                 >
                   <div>
                     <h4 className="font-medium text-[#222831]">
@@ -75,12 +76,15 @@ export function MeasurementsCard({ clientId }: MeasurementsCardProps) {
                         : measurement.name || "Untitled Measurement"}
                     </h4>
                     <p className="text-sm text-[#A1A1A1]">
+                      {measurement.order?.orderNumber && (
+                        <span className="font-mono">{measurement.order.orderNumber} • </span>
+                      )}
                       Last updated{" "}
                       {new Date(measurement.updatedAt).toLocaleDateString()}
                     </p>
                   </div>
                   <ChevronRight className="h-5 w-5 text-[#222831]" />
-                </div>
+                </button>
               ));
             })()}
           </div>

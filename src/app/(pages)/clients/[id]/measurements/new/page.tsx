@@ -1,8 +1,8 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { use } from "react";
 import { MeasurementsForm } from "@/components/client-profile/measurements-form";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,14 @@ export default function NewMeasurementPage({
 }) {
   const { id } = use(params);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("edit");
+
+  const { data: measurement } = useQuery({
+    queryKey: ["measurement", editId],
+    queryFn: () => measurementsApi.getMeasurement(editId!),
+    enabled: !!editId,
+  });
 
   const queryClient = useQueryClient();
   const saveMutation = useMutation({
@@ -22,14 +30,24 @@ export default function NewMeasurementPage({
       name: string;
       measurements: Record<string, string>;
     }) =>
-      measurementsApi.createMeasurement(id, {
-        name: measurement.name,
-        fields: measurement.measurements,
-      }),
+      editId
+        ? measurementsApi.updateMeasurement(editId, {
+            name: measurement.name,
+            fields: measurement.measurements,
+          })
+        : measurementsApi.createMeasurement(id, {
+            name: measurement.name,
+            fields: measurement.measurements,
+          }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["measurements", id] });
       queryClient.invalidateQueries({ queryKey: ["client", id] });
-      router.push(`/clients/${id}/measurements`);
+      if (editId) {
+        queryClient.invalidateQueries({ queryKey: ["measurement", editId] });
+        router.push(`/clients/${id}/measurements/${editId}`);
+      } else {
+        router.push(`/clients/${id}/measurements`);
+      }
     },
   });
 
@@ -56,7 +74,7 @@ export default function NewMeasurementPage({
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <h1 className="text-lg font-semibold text-[#222831]">
-          New Measurement
+          {editId ? "Edit Measurement" : "New Measurement"}
         </h1>
       </div>
 
@@ -64,6 +82,10 @@ export default function NewMeasurementPage({
         onSave={handleSave}
         onCancel={handleCancel}
         isLoading={saveMutation.isPending}
+        initialData={measurement ? {
+          name: measurement.name,
+          measurements: measurement.fields as Record<string, string>,
+        } : undefined}
       />
     </div>
   );

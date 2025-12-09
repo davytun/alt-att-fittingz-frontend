@@ -1,16 +1,16 @@
 "use client";
 
-import { Calendar, DollarSign, Ruler, ShoppingBag, User } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
 import { ArrowRight2 } from "iconsax-react";
+import { Calendar, DollarSign, Ruler, ShoppingBag, User } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRecentUpdates } from "@/hooks/api/use-recent-updates";
 import type { RecentUpdate, RecentUpdateType } from "@/types/recent-updates";
 
 const getActivityIcon = (type: RecentUpdateType) => {
-  const iconClass = "h-5 w-5";
+  const iconClass = "h-4 w-4";
 
   switch (type) {
     case "CLIENT_CREATED":
@@ -38,11 +38,12 @@ const getActivityIcon = (type: RecentUpdateType) => {
 };
 
 const getActivityColor = (type: RecentUpdateType) => {
-  if (type.includes("CREATED")) return "bg-green-50";
-  if (type.includes("UPDATED")) return "bg-blue-50";
-  if (type.includes("DELETED")) return "bg-red-50";
-  if (type.includes("PAYMENT")) return "bg-emerald-50";
-  return "bg-gray-50";
+  if (type.includes("CLIENT")) return { bg: "bg-green-50", dot: "bg-green-500" };
+  if (type.includes("ORDER")) return { bg: "bg-blue-50", dot: "bg-blue-500" };
+  if (type.includes("PAYMENT")) return { bg: "bg-emerald-50", dot: "bg-emerald-500" };
+  if (type.includes("MEASUREMENT")) return { bg: "bg-purple-50", dot: "bg-purple-500" };
+  if (type.includes("DELETED")) return { bg: "bg-red-50", dot: "bg-red-500" };
+  return { bg: "bg-gray-50", dot: "bg-gray-400" };
 };
 
 const getEntityLink = (update: RecentUpdate): string | null => {
@@ -74,18 +75,22 @@ export function RecentUpdatesFeed() {
     <Card className="shadow-lg">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-base md:text-lg">Recent Updates</CardTitle>
-        <Button variant="link" className="text-[#0F4C75]">
+        <Button 
+          variant="link" 
+          className="text-[#0F4C75]"
+          onClick={() => router.push("/dashboard/activity")}
+        >
           View All
         </Button>
       </CardHeader>
 
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-2">
         {isLoading ? (
           // Loading skeleton
           <div className="space-y-3">
-            {[...Array(3)].map((_, i) => (
+            {["skeleton-1", "skeleton-2", "skeleton-3"].map((id) => (
               <div
-                key={`skeleton-${i}`}
+                key={id}
                 className="flex items-center justify-between rounded-xl border border-[#0F4C75] bg-white px-4 py-3 shadow-sm animate-pulse"
               >
                 <div className="flex items-center gap-3 flex-1">
@@ -100,8 +105,16 @@ export function RecentUpdatesFeed() {
           </div>
         ) : !hasUpdates ? (
           // Empty state
-          <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center text-gray-500">
-            No recent activity yet. Activity will appear here as you work.
+          <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
+            <div className="mx-auto w-12 h-12 mb-2 rounded-full bg-blue-100 flex items-center justify-center">
+              <Calendar className="h-6 w-6 text-blue-600" />
+            </div>
+            <p className="text-sm font-medium text-gray-700 mb-1">
+              All caught up!
+            </p>
+            <p className="text-xs text-gray-500">
+              No new updates at the moment
+            </p>
           </div>
         ) : (
           // Activity list
@@ -110,6 +123,16 @@ export function RecentUpdatesFeed() {
             const timeAgo = formatDistanceToNow(new Date(update.createdAt), {
               addSuffix: true,
             });
+            const colors = getActivityColor(update.type);
+            const createdDate = new Date(update.createdAt);
+            const formattedDate = createdDate.toLocaleString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+            });
 
             return (
               <button
@@ -117,38 +140,36 @@ export function RecentUpdatesFeed() {
                 type="button"
                 onClick={() => hasLink && handleActivityClick(update)}
                 disabled={!hasLink}
-                className={`flex w-full items-center justify-between rounded-xl border border-[#0F4C75] bg-white px-4 py-3 text-left shadow-sm transition ${
-                  hasLink ? "hover:bg-gray-50 cursor-pointer" : "cursor-default"
+                title={formattedDate}
+                className={`flex w-full items-center gap-3 rounded-lg border border-[#0F4C75] bg-white px-3 py-2.5 text-left transition ${
+                  hasLink ? "hover:bg-gray-50 cursor-pointer" : "opacity-60 cursor-default"
                 }`}
               >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  {/* Icon */}
-                  <div
-                    className={`shrink-0 h-10 w-10 rounded-full flex items-center justify-center ${getActivityColor(
-                      update.type
-                    )}`}
-                  >
-                    {getActivityIcon(update.type)}
-                  </div>
+                {/* Status dot */}
+                <div className={`shrink-0 h-2 w-2 rounded-full ${colors.dot}`} />
 
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[#222831] truncate">
-                      {update.title}
-                    </p>
-                    <p className="text-xs text-gray-500">{timeAgo}</p>
-                  </div>
+                {/* Icon */}
+                <div
+                  className={`shrink-0 h-9 w-9 rounded-full flex items-center justify-center ${colors.bg}`}
+                >
+                  {getActivityIcon(update.type)}
                 </div>
 
-                {/* Arrow icon */}
-                {hasLink && (
-                  <ArrowRight2
-                    size="24"
-                    color="#0F4C75"
-                    variant="Outline"
-                    className="shrink-0"
-                  />
-                )}
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-[#222831] truncate">
+                    {update.title}
+                  </p>
+                  <p className="text-xs text-gray-500">{timeAgo}</p>
+                </div>
+
+                {/* Arrow icon - always show */}
+                <ArrowRight2
+                  size="20"
+                  color={hasLink ? "#0F4C75" : "#9CA3AF"}
+                  variant="Outline"
+                  className="shrink-0"
+                />
               </button>
             );
           })
