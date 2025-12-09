@@ -17,6 +17,10 @@ export function DashboardHeader() {
     return "Good Evening";
   };
 
+  if (!admin) {
+    return <DashboardHeaderSkeleton />;
+  }
+
   return (
     <section className="relative overflow-hidden rounded-3xl bg-[#0F4C75] px-6 py-8 text-white shadow-sm">
       <div className="absolute -top-16 right-0 h-40 w-40 rounded-full bg-white/10" />
@@ -26,7 +30,7 @@ export function DashboardHeader() {
             {getGreeting()}
           </p>
           <h1 className="mt-2 text-2xl font-bold md:text-3xl">
-            {admin?.businessName || "Fittingz Admin"}
+            {admin.businessName}
           </h1>
         </div>
         <div className="flex flex-wrap gap-3">
