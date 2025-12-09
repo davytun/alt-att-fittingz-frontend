@@ -74,15 +74,15 @@ export default function ClientProfilePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const { data: client, isLoading, error } = useClient(id);
+  const { data: client, isLoading, error, isFetching } = useClient(id);
 
-  // Show skeleton while loading
-  if (isLoading) {
+  // Show skeleton while loading or fetching
+  if (isLoading || isFetching || !client) {
     return <ClientProfileSkeleton />;
   }
 
   // Clean error state
-  if (error || !client) {
+  if (error) {
     return (
       <div className="p-8 text-center">
         <div className="text-2xl font-bold text-red-600 mb-2">

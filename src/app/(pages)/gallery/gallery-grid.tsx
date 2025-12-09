@@ -490,7 +490,7 @@ export function GalleryGrid() {
       {/* Enhanced Floating Action Button */}
       <Button
         onClick={() => setIsAddOpen(true)}
-        className="fixed bottom-8 right-8 z-50 h-16 w-16 rounded-full bg-gradient-to-br from-[#0F4C75] to-[#1a5a8f] shadow-2xl hover:shadow-[0_20px_50px_rgba(15,76,117,0.4)] hover:scale-110 transition-all duration-300 group"
+        className="fixed bottom-24 right-8 md:bottom-8 z-50 h-16 w-16 rounded-full bg-gradient-to-br from-[#0F4C75] to-[#1a5a8f] shadow-2xl hover:shadow-[0_20px_50px_rgba(15,76,117,0.4)] hover:scale-110 transition-all duration-300 group"
       >
         <Plus className="h-7 w-7 text-white transition-transform group-hover:rotate-90 duration-300" />
       </Button>

@@ -21,7 +21,7 @@ export default function SettingsPage() {
   const { logout } = useAuthContext();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen mb-16">
       {/* Header */}
       <div className="max-w-4xl mx-auto flex items-center px-4 md:px-6 py-4 md:py-5">
         <button
