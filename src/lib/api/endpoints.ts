@@ -26,4 +26,8 @@ export const endpoints = {
     update: (id: string) => `/clients/${id}`,
     delete: (id: string) => `/clients/${id}`,
   },
+  recentUpdates: {
+    list: (limit?: number) => `/recent-updates${limit ? `?limit=${limit}` : ""}`,
+    summary: (days = 7) => `/recent-updates/summary?days=${days}`,
+  },
 } as const;

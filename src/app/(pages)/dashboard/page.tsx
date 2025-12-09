@@ -1,4 +1,3 @@
-// app/(app)/dashboard/page.tsx
 import { Suspense } from "react";
 import {
   ActivitySummary,
@@ -12,10 +11,7 @@ import {
   MetricsGrid,
   MetricsGridSkeleton,
 } from "@/components/dashboard/metrics-grid";
-import {
-  RecentActivity,
-  RecentActivitySkeleton,
-} from "@/components/dashboard/recent-activity";
+import { RecentUpdatesFeed } from "@/components/dashboard/recent-updates-feed";
 
 export const metadata = {
   title: "Dashboard - Fittingz",
@@ -34,9 +30,7 @@ export default function DashboardPage() {
       </Suspense>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Suspense fallback={<RecentActivitySkeleton />}>
-          <RecentActivity />
-        </Suspense>
+        <RecentUpdatesFeed />
 
         <Suspense fallback={<ActivitySummarySkeleton />}>
           <ActivitySummary />
