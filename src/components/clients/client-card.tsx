@@ -20,14 +20,14 @@ type Client = {
   email?: string | null;
   _count?: {
     measurements: number;
-    orders: number;
+    Order: number;
   };
 };
 
 export function ClientCard({ client }: { client: Client }) {
   const router = useRouter();
   const measurements = client._count?.measurements ?? 0;
-  const orders = client._count?.orders ?? 0;
+  const orders = client._count?.Order ?? 0;
 
   return (
     <Card

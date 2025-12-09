@@ -22,6 +22,7 @@ export const ClientSchema = z.object({
   _count: z.object({
     measurements: z.number(),
     styleImages: z.number(),
+    Order: z.number(),
   }),
 });
 
