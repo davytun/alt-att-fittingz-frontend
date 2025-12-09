@@ -39,7 +39,7 @@ const getActivityIcon = (type: RecentUpdateType) => {
 
 const getActivityColor = (type: RecentUpdateType) => {
   if (type.includes("CLIENT")) return { bg: "bg-green-50", dot: "bg-green-500" };
-  if (type.includes("ORDER")) return { bg: "bg-blue-50", dot: "bg-blue-500" };
+  if (type.includes("ORDER")) return { bg: "bg-blue-50", dot: "bg-blue-700" };
   if (type.includes("PAYMENT")) return { bg: "bg-emerald-50", dot: "bg-emerald-500" };
   if (type.includes("MEASUREMENT")) return { bg: "bg-purple-50", dot: "bg-purple-500" };
   if (type.includes("DELETED")) return { bg: "bg-red-50", dot: "bg-red-500" };

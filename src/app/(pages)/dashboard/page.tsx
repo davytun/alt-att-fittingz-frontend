@@ -29,11 +29,15 @@ export default function DashboardPage() {
         <MetricsGrid />
       </Suspense>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <RecentUpdatesFeed />
-        <Suspense fallback={<OrderStatusChartSkeleton />}>
-          <OrderStatusChart />
-        </Suspense>
+      <div className="grid gap-6 lg:grid-cols-2 overflow-hidden">
+        <div className="overflow-hidden">
+          <RecentUpdatesFeed />
+        </div>
+        <div className="overflow-hidden">
+          <Suspense fallback={<OrderStatusChartSkeleton />}>
+            <OrderStatusChart />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

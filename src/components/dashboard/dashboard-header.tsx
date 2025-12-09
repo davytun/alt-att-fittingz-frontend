@@ -31,15 +31,16 @@ export function DashboardHeader() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Button
-            variant="outline"
-            className="border-white/50 text-white hover:bg-white/10"
+            variant={"secondary"}
+            className=""
             onClick={() => router.push("/clients/new")}
           >
             <Plus className="mr-2 h-5 w-5" />
             New Client
           </Button>
           <Button
-            className="bg-white text-[#0F4C75] hover:bg-white/90"
+            variant={"secondary"}
+            className=""
             onClick={() =>
               toast.info("Coming soon", {
                 description: "Order management is under development.",
