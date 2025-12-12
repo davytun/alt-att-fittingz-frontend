@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function ClientsPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-20 md:pb-8">
       <ClientsHeader />
       <ClientsSearchBar />
       <ClientsListWrapper />

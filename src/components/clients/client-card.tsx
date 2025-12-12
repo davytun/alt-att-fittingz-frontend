@@ -24,10 +24,10 @@ export function ClientCard({ client }: { client: Client }) {
 
   return (
     <Card
-      className="group relative overflow-hidden border border-gray-200 bg-white p-6 md:p-10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-[#0F4C75]/20 cursor-pointer rounded-2xl"
+      className="group relative overflow-hidden border border-gray-200 bg-white p-6 md:p-10 transition-all duration-300 md:hover:-translate-y-1 md:hover:shadow-xl md:hover:border-[#0F4C75]/20 cursor-pointer rounded-2xl active:scale-95"
       onClick={() => router.push(`/clients/${client.id}`)}
     >
-      <div className="absolute inset-0 bg-linear-to-br from-[#0F4C75]/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+      <div className="absolute inset-0 bg-linear-to-br from-[#0F4C75]/5 to-transparent opacity-0 transition-opacity md:group-hover:opacity-100" />
       <div className="relative flex flex-col gap-5">
         <div className="flex items-start gap-4">
           <div className="flex-1">
@@ -80,11 +80,11 @@ export function ClientCard({ client }: { client: Client }) {
 
         <Button
           size="lg"
-          className="mt-4 w-full bg-[#0F4C75] hover:bg-[#0F4C75]/70 font-bold text-white shadow-md transition-all hover:bg-[#0F4C75]/90 hover:shadow-lg cursor-pointer md:mt-0 md:w-auto group-hover:translate-x-1"
+          className="mt-4 w-full bg-[#0F4C75] md:hover:bg-[#0F4C75]/90 font-bold text-white shadow-md transition-all md:hover:shadow-lg cursor-pointer md:mt-0 md:w-auto md:group-hover:translate-x-1 active:scale-95"
           onClick={() => router.push(`/clients/${client.id}`)}
         >
           View Profile
-          <ArrowRight className="ml-2 h-5 w-6 transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="ml-2 h-5 w-6 transition-transform md:group-hover:translate-x-1" />
         </Button>
       </div>
     </Card>
