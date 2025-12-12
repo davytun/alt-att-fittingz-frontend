@@ -58,7 +58,7 @@ export class AuthHandler {
           // Prefer admin from response; fallback to existing admin
           const adminToUse =
             (data as { admin?: unknown }).admin || currentAdmin;
-          setAuth(adminToUse as Record<string, unknown>, data.token);
+          setAuth(adminToUse as any, data.token);
         } else {
           throw new APIError("No token returned from refresh", 401);
         }
