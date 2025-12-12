@@ -105,7 +105,7 @@ export async function apiClient<T = unknown>(
       response.statusText ||
       "Request failed";
 
-    throw new APIError(message, response.status, errorBody.code, errorBody);
+    throw new APIError(message as string, response.status, errorBody.code as string, errorBody);
   }
 
   try {
