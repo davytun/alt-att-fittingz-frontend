@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  ArrowRight,
-  Mail,
-  Phone,
-  Ruler,
-  ShoppingBag,
-  User,
-} from "lucide-react";
+import { ArrowRight, Mail, Phone, Ruler, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";

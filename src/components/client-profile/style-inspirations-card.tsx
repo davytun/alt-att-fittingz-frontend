@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Edit, Plus, Trash2, Upload, X } from "lucide-react";
+import { Plus, Trash2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -164,13 +164,14 @@ export function StyleInspirationsCard({
         </CardHeader>
         <CardContent>
           {styleImages.length === 0 ? (
-            <div
+            <button
+              type="button"
               onClick={() => setIsUploadOpen(true)}
               className="aspect-3/4 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center space-y-2 hover:border-blue-400 hover:bg-blue-50 cursor-pointer transition-all"
             >
               <Upload className="h-8 w-8 text-gray-400" />
               <span className="text-sm text-gray-500">Upload Style Images</span>
-            </div>
+            </button>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-3">
               {(() => {
@@ -180,17 +181,14 @@ export function StyleInspirationsCard({
                     key={image.id}
                     className="group relative aspect-3/4 bg-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
                   >
-                    <img
+                    <Image
                       src={image.imageUrl}
                       alt={image.description || "Style inspiration"}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        console.error("Failed to load image:", image.imageUrl);
-                        e.currentTarget.src =
-                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='12' fill='%23999'%3EImage Error%3C/text%3E%3C/svg%3E";
-                      }}
+                      fill
+                      className="object-cover"
                     />
                     <button
+                      type="button"
                       onClick={() => setImageToDelete(image)}
                       className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
                     >
@@ -204,13 +202,14 @@ export function StyleInspirationsCard({
                   </div>
                 ));
               })()}
-              <div
+              <button
+                type="button"
                 onClick={() => setIsUploadOpen(true)}
                 className="aspect-3/4 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center space-y-2 hover:border-blue-400 hover:bg-blue-50 cursor-pointer transition-all"
               >
                 <Upload className="h-6 w-6 text-gray-400" />
                 <span className="text-sm text-gray-500">Add More</span>
-              </div>
+              </button>
             </div>
           )}
         </CardContent>
@@ -243,13 +242,19 @@ export function StyleInspirationsCard({
                 <Label>Selected Images ({selectedImages.length})</Label>
                 <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
                   {selectedImages.map((file, index) => (
-                    <div key={index} className="relative group">
-                      <img
+                    <div
+                      key={`${file.name}-${file.size}-${index}`}
+                      className="relative group"
+                    >
+                      <Image
                         src={URL.createObjectURL(file)}
                         alt={file.name}
+                        width={80}
+                        height={80}
                         className="w-full h-20 object-cover rounded"
                       />
                       <button
+                        type="button"
                         onClick={() => handleRemoveFile(index)}
                         className="absolute -top-1 -right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                       >

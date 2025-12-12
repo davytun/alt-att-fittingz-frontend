@@ -77,7 +77,9 @@ export function MeasurementsCard({ clientId }: MeasurementsCardProps) {
                     </h4>
                     <p className="text-sm text-[#A1A1A1]">
                       {measurement.order?.orderNumber && (
-                        <span className="font-mono">{measurement.order.orderNumber} • </span>
+                        <span className="font-mono">
+                          {measurement.order.orderNumber} •{" "}
+                        </span>
                       )}
                       Last updated{" "}
                       {new Date(measurement.updatedAt).toLocaleDateString()}

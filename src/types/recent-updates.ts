@@ -13,7 +13,12 @@ export type RecentUpdateType =
   | "PROJECT_CREATED"
   | "PROJECT_UPDATED";
 
-export type EntityType = "Client" | "Order" | "Payment" | "Measurement" | "Project";
+export type EntityType =
+  | "Client"
+  | "Order"
+  | "Payment"
+  | "Measurement"
+  | "Project";
 
 export interface RecentUpdate {
   id: string;
@@ -51,4 +56,3 @@ export interface ActivitySummaryResponse {
   message: string;
   data: ActivitySummary;
 }
-

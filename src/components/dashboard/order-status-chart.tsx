@@ -41,7 +41,7 @@ const STATUS_LABELS = {
 function getDateKey(date: Date): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
     2,
-    "0"
+    "0",
   )}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
@@ -67,7 +67,7 @@ export function OrderStatusChart() {
 
   // Get unique statuses present in data
   const statusesInData = Array.from(
-    new Set(recentOrders.map((order) => order.status))
+    new Set(recentOrders.map((order) => order.status)),
   );
 
   // Group orders by date key
@@ -85,12 +85,15 @@ export function OrderStatusChart() {
   const chartData = days.map(({ date, key }) => {
     const dayOrders = ordersByDate.get(key) || [];
 
-    const statusCounts = dayOrders.reduce((acc, order) => {
-      acc[order.status] = (acc[order.status] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const statusCounts = dayOrders.reduce(
+      (acc, order) => {
+        acc[order.status] = (acc[order.status] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
 
-    const dataPoint: Record<string, any> = {
+    const dataPoint: Record<string, string | number> = {
       date: date.toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
@@ -100,7 +103,7 @@ export function OrderStatusChart() {
     };
 
     // Add all possible statuses with 0 as default
-    statusesInData.forEach(status => {
+    statusesInData.forEach((status) => {
       dataPoint[status] = statusCounts[status] || 0;
     });
 
@@ -188,7 +191,7 @@ export function OrderStatusChart() {
                     axisLine={false}
                     width={30}
                     allowDecimals={false}
-                    domain={[0, 'auto']}
+                    domain={[0, "auto"]}
                   />
                   <Tooltip
                     contentStyle={{

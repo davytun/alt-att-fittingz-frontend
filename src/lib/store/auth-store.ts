@@ -49,7 +49,7 @@ export const useAuthStore = create<AuthStore>()(
       isLoading: true, // Start with loading true
 
       setAuth: (admin: Admin, token: string) => {
-        console.log("Setting auth:", { admin: !!admin, token: !!token });
+        // console.log("Setting auth:", { admin: !!admin, token: !!token });
         set({
           admin,
           token,
@@ -94,11 +94,11 @@ export const useAuthStore = create<AuthStore>()(
         // Validate auth state on rehydration
         if (state) {
           const hasValidAuth = !!(state.admin && state.token);
-          console.log("Rehydrating auth:", {
-            hasValidAuth,
-            admin: !!state.admin,
-            token: !!state.token,
-          });
+          // console.log("Rehydrating auth:", {
+          //   hasValidAuth,
+          //   admin: !!state.admin,
+          //   token: !!state.token,
+          // });
 
           if (!hasValidAuth) {
             state.clearAuth();

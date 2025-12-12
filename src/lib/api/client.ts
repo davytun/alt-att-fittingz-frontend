@@ -9,7 +9,7 @@ export class APIError extends Error {
     message: string,
     public status: number,
     public code?: string,
-    public details?: any,
+    public details?: unknown,
   ) {
     super(message);
     this.name = "APIError";
@@ -35,7 +35,7 @@ export interface ApiClientOptions extends RequestInit {
   skipAuthRefresh?: boolean;
 }
 
-export async function apiClient<T = any>(
+export async function apiClient<T = unknown>(
   endpoint: string,
   options: ApiClientOptions = {},
 ): Promise<T> {
@@ -89,7 +89,7 @@ export async function apiClient<T = any>(
   }
 
   if (!response.ok) {
-    let errorBody: any = {};
+    let errorBody: Record<string, unknown> = {};
     try {
       errorBody = await response.json();
     } catch {}
@@ -98,7 +98,9 @@ export async function apiClient<T = any>(
       errorBody.message ||
       errorBody.details ||
       (Array.isArray(errorBody.errors)
-        ? errorBody.errors.map((e: any) => e.message || String(e)).join(", ")
+        ? errorBody.errors
+            .map((e: Record<string, unknown>) => e.message || String(e))
+            .join(", ")
         : null) ||
       response.statusText ||
       "Request failed";

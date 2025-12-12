@@ -152,6 +152,7 @@ export function GalleryGrid() {
                 />
                 {searchQuery && (
                   <button
+                    type="button"
                     onClick={() => setSearchQuery("")}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
@@ -218,6 +219,7 @@ export function GalleryGrid() {
                 >
                   Search: {searchQuery}
                   <button
+                    type="button"
                     onClick={() => setSearchQuery("")}
                     className="ml-1 hover:text-blue-900"
                   >
@@ -234,6 +236,7 @@ export function GalleryGrid() {
                   {clientsData?.data?.find((c) => c.id === selectedClientId)
                     ?.name || "Unknown"}
                   <button
+                    type="button"
                     onClick={() => setSelectedClientId("all")}
                     className="ml-1 hover:text-blue-900"
                   >
@@ -317,9 +320,9 @@ export function GalleryGrid() {
         </div>
       ) : isLoading || authLoading ? (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {[...Array(8)].map((_, i) => (
+          {Array.from({ length: 8 }, () => (
             <div
-              key={i}
+              key={crypto.randomUUID()}
               className="aspect-[3/4] overflow-hidden rounded-2xl bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse"
             >
               <div className="h-full w-full bg-gradient-to-tr from-transparent via-white/20 to-transparent" />
@@ -372,7 +375,8 @@ export function GalleryGrid() {
               {/* Selection Checkbox */}
               {isSelectionMode && (
                 <div className="absolute left-3 top-3 z-20">
-                  <div
+                  <button
+                    type="button"
                     className="rounded-lg bg-white/95 p-1 shadow-lg backdrop-blur-sm"
                     onClick={(e) => e.stopPropagation()}
                   >
@@ -383,7 +387,7 @@ export function GalleryGrid() {
                       }}
                       className="h-5 w-5 border-2 border-blue-500 data-[state=checked]:bg-blue-600"
                     />
-                  </div>
+                  </button>
                 </div>
               )}
 

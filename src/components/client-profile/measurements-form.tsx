@@ -2,7 +2,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import { useId, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +20,7 @@ const defaultFields = [
   { label: "Inseam (inches)", key: "inseam" },
 ];
 
-const defaultFieldKeys = defaultFields.map(f => f.key);
+const defaultFieldKeys = defaultFields.map((f) => f.key);
 export function MeasurementsForm({
   onSave,
   onCancel,
@@ -38,19 +38,23 @@ export function MeasurementsForm({
     measurements: Record<string, string>;
   };
 }) {
-  const [measurementName, setMeasurementName] = useState(initialData?.name || "");
-  const [measurements, setMeasurements] = useState<Record<string, string>>(initialData?.measurements || {});
+  const [measurementName, setMeasurementName] = useState(
+    initialData?.name || "",
+  );
+  const [measurements, setMeasurements] = useState<Record<string, string>>(
+    initialData?.measurements || {},
+  );
 
   // Fixed custom fields state
   const [customFields, setCustomFields] = useState<
     Array<{ id: string; label: string; key: string; isEditing: boolean }>
   >(() => {
     if (!initialData?.measurements) return [];
-    const customKeys = Object.keys(initialData.measurements).filter(key => 
-      !defaultFieldKeys.includes(key)
+    const customKeys = Object.keys(initialData.measurements).filter(
+      (key) => !defaultFieldKeys.includes(key),
     );
-    return customKeys.map(key => {
-      const labelFromKey = key.replace(/_/g, ' ');
+    return customKeys.map((key) => {
+      const labelFromKey = key.replace(/_/g, " ");
       return {
         id: key,
         key,
@@ -82,17 +86,19 @@ export function MeasurementsForm({
 
   const saveLabel = (id: string, newLabel: string) => {
     if (!newLabel.trim()) return;
-    const oldField = customFields.find(f => f.id === id);
-    const newKey = newLabel.trim().replace(/\s+/g, '_');
-    
+    const oldField = customFields.find((f) => f.id === id);
+    const newKey = newLabel.trim().replace(/\s+/g, "_");
+
     setCustomFields((prev) =>
       prev.map((f) =>
-        f.id === id ? { ...f, key: newKey, label: newLabel.trim(), isEditing: false } : f,
+        f.id === id
+          ? { ...f, key: newKey, label: newLabel.trim(), isEditing: false }
+          : f,
       ),
     );
-    
+
     // Update measurements with new key
-    if (oldField && oldField.key && oldField.key !== newKey) {
+    if (oldField?.key && oldField.key !== newKey) {
       setMeasurements((prev) => {
         const newMeasurements = { ...prev };
         if (oldField.key in newMeasurements) {

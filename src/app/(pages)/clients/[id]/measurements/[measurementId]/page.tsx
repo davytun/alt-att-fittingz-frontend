@@ -8,7 +8,6 @@ import { use } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { measurementsApi } from "@/lib/api/measurements";
 
@@ -40,20 +39,20 @@ export default function MeasurementDetailPage({
   // Helper to format field names
   const formatFieldName = (key: string) => {
     return key
-      .replace(/_/g, ' ')
-      .replace(/([A-Z])/g, ' $1')
+      .replace(/_/g, " ")
+      .replace(/([A-Z])/g, " $1")
       .trim()
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ')
-      .replace(/\s+/g, ' ');
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ")
+      .replace(/\s+/g, " ");
   };
 
   // Helper to format values with units
-  const formatValue = (value: unknown) => {
-    const strValue = String(value || '');
+  const _formatValue = (value: unknown) => {
+    const strValue = String(value || "");
     // If it's a number, assume it's in cm
-    if (!isNaN(Number(strValue)) && strValue.trim() !== '') {
+    if (!Number.isNaN(Number(strValue)) && strValue.trim() !== "") {
       return `${strValue} cm`;
     }
     return strValue;
@@ -61,9 +60,9 @@ export default function MeasurementDetailPage({
 
   // Capitalize name
   const capitalizedName = measurement.name
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
 
   return (
     <div className="min-h-screen bg-[#F2F2F2]">
@@ -89,7 +88,8 @@ export default function MeasurementDetailPage({
                     {measurement.order.orderNumber}
                   </span>
                 )}
-                Last updated: {new Date(measurement.updatedAt).toLocaleDateString()}
+                Last updated:{" "}
+                {new Date(measurement.updatedAt).toLocaleDateString()}
               </p>
             </div>
             <Button
@@ -124,9 +124,12 @@ export default function MeasurementDetailPage({
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {fieldEntries.map(([key, value]) => {
-                  const strValue = String(value || '');
-                  const numValue = !isNaN(Number(strValue)) && strValue.trim() !== '' ? strValue : null;
-                  
+                  const strValue = String(value || "");
+                  const numValue =
+                    !Number.isNaN(Number(strValue)) && strValue.trim() !== ""
+                      ? strValue
+                      : null;
+
                   return (
                     <div key={key} className="space-y-1">
                       <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
@@ -135,7 +138,10 @@ export default function MeasurementDetailPage({
                       <p className="text-lg font-semibold text-gray-900">
                         {numValue ? (
                           <>
-                            {numValue} <span className="text-sm font-normal text-gray-500">cm</span>
+                            {numValue}{" "}
+                            <span className="text-sm font-normal text-gray-500">
+                              cm
+                            </span>
                           </>
                         ) : (
                           strValue

@@ -7,11 +7,11 @@ import {
   MetricsGrid,
   MetricsGridSkeleton,
 } from "@/components/dashboard/metrics-grid";
-import { RecentUpdatesFeed } from "@/components/dashboard/recent-updates-feed";
 import {
   OrderStatusChart,
   OrderStatusChartSkeleton,
 } from "@/components/dashboard/order-status-chart";
+import { RecentUpdatesFeed } from "@/components/dashboard/recent-updates-feed";
 
 export const metadata = {
   title: "Dashboard - Fittingz",

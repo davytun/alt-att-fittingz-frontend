@@ -35,7 +35,6 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { measurementsApi } from "@/lib/api/measurements";
 import { ordersApi } from "@/lib/api/orders";
-import { createOrderSchema } from "@/lib/order-schemas";
 import type { CreateOrderRequest } from "@/types/order";
 
 interface OrderFormProps {
@@ -146,9 +145,9 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
       toast.success("Order created successfully!");
       router.push(`/clients/${clientId}`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error("Order creation error:", error);
-      console.error("Error status:", error?.status);
+      console.error("Error status:", (error as { status?: number })?.status);
       console.error("Error details:", error);
       // APIError from our client has the message from backend
       const errorMessage = error?.message || "Failed to create order";
@@ -196,7 +195,7 @@ export function OrderForm({ clientId, clientName }: OrderFormProps) {
     createOrderMutation.mutate(orderData);
   };
 
-  const onError = (errors: any) => {
+  const onError = (errors: Record<string, unknown>) => {
     console.log("Form validation errors:", errors);
     toast.error("Please fix the form errors before submitting");
   };

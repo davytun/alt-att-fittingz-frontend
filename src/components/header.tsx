@@ -1,8 +1,8 @@
-import { Notification, ProfileCircle } from "iconsax-react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { NotificationDropdown } from "@/components/notifications";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { UserDropdown } from "@/components/user-dropdown";
 
 export function Header({ children }: { children: React.ReactNode }) {
   return (
@@ -27,22 +27,8 @@ export function Header({ children }: { children: React.ReactNode }) {
 
         {/* Right icons */}
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <ProfileCircle
-              className="h-6 w-6"
-              color="#222831"
-              variant="Outline"
-            />
-            <span className="sr-only">Profile</span>
-          </Button>
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <Notification
-              className="h-6 w-6"
-              color="#222831"
-              variant="Outline"
-            />
-            <span className="sr-only">Notifications</span>
-          </Button>
+          <UserDropdown />
+          <NotificationDropdown />
         </div>
       </header>
 

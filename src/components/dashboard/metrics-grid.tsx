@@ -1,22 +1,24 @@
 "use client";
 
-import { Users, ShoppingBag, Lightbulb, UserPlus } from "lucide-react";
+import { Lightbulb, ShoppingBag, UserPlus, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useClientList } from "@/hooks/api/use-clients";
 import { useAllOrders } from "@/hooks/api/use-orders";
+import { useStyleImagesCount } from "@/hooks/api/use-styles";
 
 export function MetricsGrid() {
   const { data } = useClientList(1, 10);
   const { data: ordersData } = useAllOrders(1, 1);
+  const { data: stylesCountData } = useStyleImagesCount();
   const clients = data?.data ?? [];
   const totalClients = data?.pagination.total ?? 0;
   const totalOrders = ordersData?.pagination?.total ?? 0;
-  const totalStyles = clients.reduce((a, c) => a + c._count.styleImages, 0);
+  const totalStyles = stylesCountData?.count ?? 0;
 
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
   const newThisMonth = clients.filter(
-    (c) => c.createdAt && new Date(c.createdAt) >= thirtyDaysAgo
+    (c) => c.createdAt && new Date(c.createdAt) >= thirtyDaysAgo,
   ).length;
 
   const metrics = [
@@ -35,7 +37,7 @@ export function MetricsGrid() {
       iconColor: "text-emerald-600",
     },
     {
-      title: "Inspiration Uploaded",
+      title: "Gallery Images",
       value: totalStyles,
       icon: Lightbulb,
       bgColor: "bg-indigo-500/10",

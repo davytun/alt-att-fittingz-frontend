@@ -2,10 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, CheckCircle2, Loader2, Pencil } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useProfile, useUpdateProfile } from "@/hooks/api/use-profile";
 import {
   type UpdateProfileFormData,
@@ -104,20 +103,17 @@ export function ProfileForm() {
                 <div className="absolute inset-0 bg-linear-to-r from-[#0F4C75] to-blue-600 rounded-full opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500"></div>
 
                 <div className="relative w-32 h-32 rounded-full overflow-hidden bg-linear-to-br from-gray-200 to-gray-300 border-4 border-white shadow-xl ring-4 ring-gray-100 group-hover:ring-[#0F4C75]/20 transition-all duration-300">
-                  <img
+                  <Image
                     src={
                       imagePreview ||
                       profile?.profileImageUrl ||
-                      "/placeholder-avatar.png"
+                      `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        (profile?.businessName || "User").slice(0, 2),
+                      )}&background=0F4C75&color=fff&size=200`
                     }
                     alt="Profile"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                          profile?.businessName || "User",
-                        )}&background=0F4C75&color=fff&size=200`;
-                    }}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>
 

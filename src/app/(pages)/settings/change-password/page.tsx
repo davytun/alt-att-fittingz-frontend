@@ -188,6 +188,7 @@ export default function ChangePasswordPage() {
             {/* Update Button */}
             <div className="pt-4">
               <button
+                type="button"
                 onClick={handleUpdatePassword}
                 className="w-full bg-gradient-to-r from-[#0F4C75] to-[#0d3f5f] hover:from-[#0d3f5f] hover:to-[#0a2d45] text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-[#0F4C75]/30 hover:shadow-xl hover:shadow-[#0F4C75]/40"
               >

@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, Loader2, Save, Trash2, Upload } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -122,10 +123,11 @@ export function EditInspirationDialog({
             {/* Image Preview - Left Side */}
             <div className="space-y-4">
               <div className="relative w-full aspect-[3/4] min-h-[400px] flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden shadow-lg group">
-                <img
+                <Image
                   src={inspiration.imageUrl}
                   alt={inspiration.description || "Inspiration"}
-                  className="max-h-full max-w-full object-contain"
+                  fill
+                  className="object-contain"
                 />
 
                 {/* Image Overlay Info */}

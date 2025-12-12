@@ -38,10 +38,13 @@ const getActivityIcon = (type: RecentUpdateType) => {
 };
 
 const getActivityColor = (type: RecentUpdateType) => {
-  if (type.includes("CLIENT")) return { bg: "bg-green-50", dot: "bg-green-500" };
+  if (type.includes("CLIENT"))
+    return { bg: "bg-green-50", dot: "bg-green-500" };
   if (type.includes("ORDER")) return { bg: "bg-blue-50", dot: "bg-blue-700" };
-  if (type.includes("PAYMENT")) return { bg: "bg-emerald-50", dot: "bg-emerald-500" };
-  if (type.includes("MEASUREMENT")) return { bg: "bg-purple-50", dot: "bg-purple-500" };
+  if (type.includes("PAYMENT"))
+    return { bg: "bg-emerald-50", dot: "bg-emerald-500" };
+  if (type.includes("MEASUREMENT"))
+    return { bg: "bg-purple-50", dot: "bg-purple-500" };
   if (type.includes("DELETED")) return { bg: "bg-red-50", dot: "bg-red-500" };
   return { bg: "bg-gray-50", dot: "bg-gray-400" };
 };
@@ -75,8 +78,8 @@ export function RecentUpdatesFeed() {
     <Card className="shadow-lg">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-base md:text-lg">Recent Updates</CardTitle>
-        <Button 
-          variant="link" 
+        <Button
+          variant="link"
           className="text-[#0F4C75]"
           onClick={() => router.push("/dashboard/activity")}
         >
@@ -142,11 +145,15 @@ export function RecentUpdatesFeed() {
                 disabled={!hasLink}
                 title={formattedDate}
                 className={`flex w-full items-center gap-3 rounded-lg border border-[#0F4C75] bg-white px-3 py-2.5 text-left transition ${
-                  hasLink ? "hover:bg-gray-50 cursor-pointer" : "opacity-60 cursor-default"
+                  hasLink
+                    ? "hover:bg-gray-50 cursor-pointer"
+                    : "opacity-60 cursor-default"
                 }`}
               >
                 {/* Status dot */}
-                <div className={`shrink-0 h-2 w-2 rounded-full ${colors.dot}`} />
+                <div
+                  className={`shrink-0 h-2 w-2 rounded-full ${colors.dot}`}
+                />
 
                 {/* Icon */}
                 <div

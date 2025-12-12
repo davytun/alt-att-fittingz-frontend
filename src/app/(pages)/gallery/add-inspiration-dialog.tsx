@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, Loader2, Upload, X } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -171,7 +172,8 @@ export function AddInspirationDialog({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
             {/* Left Side - Upload Area */}
             <div className="space-y-6 flex flex-col">
-              <div
+              <button
+                type="button"
                 className={`border-2 border-dashed rounded-2xl p-8 text-center relative flex-1 flex flex-col items-center justify-center min-h-[350px] transition-all duration-300 ${
                   isDragging
                     ? "border-[#0F4C75] bg-blue-50 scale-[1.02]"
@@ -180,13 +182,20 @@ export function AddInspirationDialog({
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
+                onClick={() => {
+                  const input = document.getElementById(
+                    "file-upload",
+                  ) as HTMLInputElement;
+                  input?.click();
+                }}
               >
                 <input
                   type="file"
                   accept="image/*"
                   multiple
                   onChange={handleFileSelect}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  className="sr-only"
+                  id="file-upload"
                 />
                 <div className="flex flex-col items-center justify-center space-y-4 pointer-events-none">
                   <div className="rounded-full bg-blue-100 p-6">
@@ -210,7 +219,7 @@ export function AddInspirationDialog({
                     Browse Files
                   </Button>
                 </div>
-              </div>
+              </button>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -232,7 +241,9 @@ export function AddInspirationDialog({
                   className="mr-2 h-5 w-5"
                   fill="currentColor"
                   viewBox="0 0 24 24"
+                  aria-label="Pinterest icon"
                 >
+                  <title>Pinterest</title>
                   <path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" />
                 </svg>
                 Save From Pinterest
@@ -252,16 +263,18 @@ export function AddInspirationDialog({
                   <div className="grid grid-cols-4 gap-3 max-h-48 overflow-y-auto">
                     {selectedImages.map((file, index) => (
                       <div
-                        key={index}
+                        key={`${file.name}-${file.size}`}
                         className="relative group aspect-square rounded-lg overflow-hidden"
                       >
-                        <img
+                        <Image
                           src={URL.createObjectURL(file)}
                           alt={file.name}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-200" />
                         <button
+                          type="button"
                           onClick={() => handleRemoveFile(index)}
                           className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-600 hover:scale-110 shadow-lg"
                         >

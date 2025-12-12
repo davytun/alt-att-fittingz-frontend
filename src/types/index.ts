@@ -28,3 +28,11 @@ export type {
   StyleImage,
   UpdateClientFormData,
 } from "./client";
+export type {
+  Notification,
+  NotificationParams,
+  NotificationPriority,
+  NotificationsResponse,
+  NotificationType,
+  UnreadCountResponse,
+} from "./notification";

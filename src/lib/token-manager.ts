@@ -7,7 +7,7 @@ class TokenManager {
   private isRefreshing = false;
   private failedRequests: Array<{
     resolve: () => void;
-    reject: (err: any) => void;
+    reject: (err: Error) => void;
   }> = [];
 
   private readonly REFRESH_INTERVAL = 6 * 24 * 60 * 60 * 1000; // 6 days
@@ -47,13 +47,17 @@ class TokenManager {
       setAuth(data.admin || null, data.token);
 
       // Success – resolve all queued requests
-      this.failedRequests.forEach(({ resolve }) => resolve());
+      for (const { resolve } of this.failedRequests) {
+        resolve();
+      }
       this.failedRequests = [];
 
       return true;
     } catch (error) {
       console.error("Token refresh failed:", error);
-      this.failedRequests.forEach(({ reject }) => reject(error));
+      for (const { reject } of this.failedRequests) {
+        reject(error as Error);
+      }
       this.failedRequests = [];
       this.logout();
       showToast.error("Session expired. Please log in again.");

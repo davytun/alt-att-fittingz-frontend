@@ -1,10 +1,17 @@
 "use client";
 
-import { ArrowRight2, Image, Notification, People, ShoppingBag, UserAdd } from "iconsax-react";
+import {
+  ArrowRight2,
+  Image,
+  Notification,
+  People,
+  ShoppingBag,
+  UserAdd,
+} from "iconsax-react";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -39,11 +46,14 @@ const STATUS_LABELS = {
 };
 
 function OrderStatusChart({ orders }: { orders: Array<{ status: string }> }) {
-  const statusCounts = orders.reduce((acc, order) => {
-    const status = order.status;
-    acc[status] = (acc[status] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const statusCounts = orders.reduce(
+    (acc, order) => {
+      const status = order.status;
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   const chartData = Object.entries(statusCounts).map(([status, count]) => ({
     name: STATUS_LABELS[status as keyof typeof STATUS_LABELS] || status,
@@ -167,7 +177,7 @@ export function DashboardContent() {
   const totalOrders = orders.length;
   const totalStyles = clients.reduce(
     (acc, client) => acc + client._count.styleImages,
-    0
+    0,
   );
 
   const thirtyDaysAgo = new Date();
@@ -180,7 +190,7 @@ export function DashboardContent() {
   const recentClients = [...clients]
     .sort(
       (a, b) =>
-        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     )
     .slice(0, 4);
 
@@ -241,7 +251,8 @@ export function DashboardContent() {
             </h1>
             {totalOrders > 0 && (
               <p className="mt-1 text-sm opacity-90">
-                You have {totalOrders} order{totalOrders !== 1 ? "s" : ""} in your system
+                You have {totalOrders} order{totalOrders !== 1 ? "s" : ""} in
+                your system
               </p>
             )}
           </div>
@@ -278,7 +289,9 @@ export function DashboardContent() {
           return (
             <Card key={metric.title} className="shadow-lg">
               <CardContent className="space-y-2 p-5">
-                <div className={`w-10 h-10 rounded-full ${metric.bgColor} flex items-center justify-center`}>
+                <div
+                  className={`w-10 h-10 rounded-full ${metric.bgColor} flex items-center justify-center`}
+                >
                   <Icon size={20} color={metric.iconColor} variant="Bold" />
                 </div>
                 <p className="font-semibold text-[#222831]">{metric.title}</p>

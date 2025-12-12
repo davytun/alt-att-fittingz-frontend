@@ -27,7 +27,15 @@ export const endpoints = {
     delete: (id: string) => `/clients/${id}`,
   },
   recentUpdates: {
-    list: (limit?: number) => `/recent-updates${limit ? `?limit=${limit}` : ""}`,
+    list: (limit?: number) =>
+      `/recent-updates${limit ? `?limit=${limit}` : ""}`,
     summary: (days = 7) => `/recent-updates/summary?days=${days}`,
+  },
+  notifications: {
+    list: "/notifications",
+    unreadCount: "/notifications/unread-count",
+    markAsRead: (id: string) => `/notifications/${id}/read`,
+    markAllRead: "/notifications/mark-all-read",
+    delete: (id: string) => `/notifications/${id}`,
   },
 } as const;

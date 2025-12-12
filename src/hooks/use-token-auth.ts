@@ -5,13 +5,10 @@ import { useAuth } from "./use-auth";
 export const useTokenAuth = () => {
   const { setAuth, clearAuth, isAuthenticated, admin, token } = useAuth();
 
-  const login = useCallback(
-    async (email: string, password: string) => {
-      // Login implementation would go here
-      // This is just the structure for handling the response
-    },
-    [setAuth],
-  );
+  const login = useCallback(async (_email: string, _password: string) => {
+    // Login implementation would go here
+    // This is just the structure for handling the response
+  }, []);
 
   const logout = useCallback(() => {
     clearAuth();

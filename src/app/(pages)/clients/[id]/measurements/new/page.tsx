@@ -20,7 +20,7 @@ export default function NewMeasurementPage({
 
   const { data: measurement } = useQuery({
     queryKey: ["measurement", editId],
-    queryFn: () => measurementsApi.getMeasurement(editId!),
+    queryFn: () => measurementsApi.getMeasurement(editId as string),
     enabled: !!editId,
   });
 
@@ -82,10 +82,14 @@ export default function NewMeasurementPage({
         onSave={handleSave}
         onCancel={handleCancel}
         isLoading={saveMutation.isPending}
-        initialData={measurement ? {
-          name: measurement.name,
-          measurements: measurement.fields as Record<string, string>,
-        } : undefined}
+        initialData={
+          measurement
+            ? {
+                name: measurement.name,
+                measurements: measurement.fields as Record<string, string>,
+              }
+            : undefined
+        }
       />
     </div>
   );
